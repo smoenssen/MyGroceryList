@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25dp"
+    android:minHeight="25dp">
+    <ListView
+        android:minWidth="25dp"
+        android:minHeight="25dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:clickable="true"
+        android:id="@+id/shoppingList"
+        android:listSelector="#114040" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_go"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="36dp"
+        android:src="@mipmap/ic_star" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_email"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="36dp"
+        android:src="@mipmap/ic_email_white_24dp" />
+</android.support.design.widget.CoordinatorLayout>
