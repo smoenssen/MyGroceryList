@@ -11,12 +11,20 @@
         android:layout_height="fill_parent"
         android:clickable="true"
         android:id="@+id/iconListViewAdd" />
+    <TextView
+        android:id="@+id/emptyListViewAdd"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="24sp"
+        android:text="@string/no_grocery_items"
+        android:fontFamily="sans-serif-light"/>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
         android:src="@mipmap/ic_add" />
 </android.support.design.widget.CoordinatorLayout>

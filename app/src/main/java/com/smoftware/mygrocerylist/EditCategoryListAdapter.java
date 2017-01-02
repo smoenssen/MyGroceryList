@@ -184,7 +184,7 @@ public class EditCategoryListAdapter extends BaseAdapter {
 
             if (listId != 0)
             {
-                List<Tables.ListCategory>  listCategoryList = DbConnection.db(_context).getListCategoryList(String.format("SELECT * FROM ListCategory WHERE ListId = %d AND CatId = %d", listId, category._id));
+                List<Tables.ListCategory> listCategoryList = DbConnection.db(_context).getListCategoryList(String.format("SELECT * FROM ListCategory WHERE ListId = %d AND CatId = %d", listId, category._id));
                 if (listCategoryList.size() == 0)
                 {
                     // insert new ListCategory

@@ -120,6 +120,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         DbConnection.db(this).close();
-        super.onStop();
+        super.onDestroy();
     }
 }

@@ -3,6 +3,8 @@
     package="com.smoftware.mygrocerylist">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".MyGroceryListApp"
@@ -32,7 +34,8 @@
         <activity android:name=".EditGroceryItemListActivity" />
         <activity android:name=".ManageListsActivity" />
         <activity android:name=".GoShoppingActivity" />
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".RecordingActivity"></activity>
     </application>
 
 </manifest>

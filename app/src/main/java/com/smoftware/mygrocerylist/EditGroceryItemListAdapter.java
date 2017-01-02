@@ -155,7 +155,7 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
 
     public int AddGroceryItem(String name, int isSelected)
     {
-        String query = String.format("SELECT * FROM GroceryItem WHERE Name = \'%s\' AND CatId FF= %d", name, _catId);
+        String query = String.format("SELECT * FROM GroceryItem WHERE Name = \'%s\' AND CatId = %d", name, _catId);
         List<Tables.GroceryItem> groceryItemList = db(_context).getGroceryItemList(query);
         if (groceryItemList.size() == 0)
         {

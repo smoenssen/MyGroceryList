@@ -2,7 +2,10 @@
 <resources>
     <color name="colorPrimary">#212121</color>
     <color name="colorPrimaryDark">#303030</color>
-    <color name="colorAccent">#007ACC</color>
+    <color name="colorAccent">#00D0CC</color>
+
+    <color name="colorFab">#007ACC</color>
+    <color name="colorFabRipple">#00A0CC</color>
 
     <color name="red">#FF0000</color>
     <color name="silver">#C0C0C0</color>

@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -38,6 +39,8 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
         final ListView editGroceryItemListView = (ListView)findViewById(R.id.iconListViewAdd);
         editGroceryItemListView.setAdapter(editGroceryItemListAdapter);
         this.fab = (FloatingActionButton)findViewById(R.id.fab_add);
+        this.fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
+        this.fab.setRippleColor(getResources().getColor(R.color.colorFabRipple));
 
         this.fab.show();
         showFabWithAnimation(fab, 300);

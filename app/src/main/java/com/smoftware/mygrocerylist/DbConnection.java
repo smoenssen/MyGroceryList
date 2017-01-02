@@ -235,7 +235,7 @@ public class DbConnection {
         ContentValues values = new ContentValues();
         values.put("CatId", record.CatId);
         values.put("Name", record.Name);
-        values.put("IsSelected", 0);
+        values.put("IsSelected", record.IsSelected);
 
         return (int)database.insert ("GroceryItem", null, values);
     }

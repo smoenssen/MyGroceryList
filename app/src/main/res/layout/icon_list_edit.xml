@@ -11,12 +11,28 @@
         android:layout_height="fill_parent"
         android:clickable="true"
         android:id="@+id/iconListViewEdit" />
+    <TextView
+        android:id="@+id/emptyListViewEdit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="24sp"
+        android:text="@string/no_grocery_items"
+        android:fontFamily="sans-serif-light"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_mic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:src="@mipmap/ic_mic_white_24dp" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="20dp"
-        android:layout_marginRight="36dp"
+        android:layout_marginEnd="20dp"
         android:src="@mipmap/ic_edit" />
 </android.support.design.widget.CoordinatorLayout>

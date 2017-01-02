@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -40,6 +41,8 @@ public class EditCategoryListActivity extends AppCompatActivity implements AddCa
         final ListView editCategoryListView = (ListView)findViewById(R.id.iconListViewAdd);
         editCategoryListView.setAdapter(editCategoryListAdapter);
         this.fab = (FloatingActionButton)findViewById(R.id.fab_add);
+        this.fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
+        this.fab.setRippleColor(getResources().getColor(R.color.colorFabRipple));
 
         this.fab.show();
         showFabWithAnimation(fab, 300);
