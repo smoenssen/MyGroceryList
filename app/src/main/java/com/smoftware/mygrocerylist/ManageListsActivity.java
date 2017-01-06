@@ -18,6 +18,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ManageListsActivity extends AppCompatActivity implements AddListFragment.IOnAddListDialogListener {
@@ -40,6 +41,11 @@ public class ManageListsActivity extends AppCompatActivity implements AddListFra
         listsManageAdapter = new ManageListsAdapter(this);
         final ListView manageListsView = (ListView)findViewById(R.id.iconListViewAdd);
         manageListsView.setAdapter(listsManageAdapter);
+
+        TextView emptyListView = (TextView) findViewById(R.id.emptyListViewAdd);
+        emptyListView.setText(R.string.no_grocery_lists);
+        manageListsView.setEmptyView(emptyListView);
+
         this.fab = (FloatingActionButton)findViewById(R.id.fab_add);
         this.fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
         this.fab.setRippleColor(getResources().getColor(R.color.colorFabRipple));

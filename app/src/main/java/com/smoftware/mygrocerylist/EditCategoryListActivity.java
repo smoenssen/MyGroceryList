@@ -17,6 +17,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditCategoryListActivity extends AppCompatActivity implements AddCategoryFragment.IOnAddCategoryDialogListener {
@@ -40,6 +41,11 @@ public class EditCategoryListActivity extends AppCompatActivity implements AddCa
         editCategoryListAdapter = new EditCategoryListAdapter(this, listId);
         final ListView editCategoryListView = (ListView)findViewById(R.id.iconListViewAdd);
         editCategoryListView.setAdapter(editCategoryListAdapter);
+
+        TextView emptyListView = (TextView) findViewById(R.id.emptyListViewAdd);
+        emptyListView.setText(R.string.no_grocery_categories);
+        editCategoryListView.setEmptyView(emptyListView);
+
         this.fab = (FloatingActionButton)findViewById(R.id.fab_add);
         this.fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
         this.fab.setRippleColor(getResources().getColor(R.color.colorFabRipple));

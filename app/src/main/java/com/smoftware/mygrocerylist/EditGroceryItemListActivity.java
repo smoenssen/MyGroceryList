@@ -17,6 +17,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -38,6 +39,11 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
         editGroceryItemListAdapter = new EditGroceryItemListAdapter(this, catId, listId);
         final ListView editGroceryItemListView = (ListView)findViewById(R.id.iconListViewAdd);
         editGroceryItemListView.setAdapter(editGroceryItemListAdapter);
+
+        TextView emptyListView = (TextView) findViewById(R.id.emptyListViewAdd);
+        emptyListView.setText(R.string.no_grocery_items);
+        editGroceryItemListView.setEmptyView(emptyListView);
+
         this.fab = (FloatingActionButton)findViewById(R.id.fab_add);
         this.fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
         this.fab.setRippleColor(getResources().getColor(R.color.colorFabRipple));

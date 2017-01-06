@@ -3,14 +3,12 @@ package com.smoftware.mygrocerylist;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -31,8 +29,6 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
-
-import java.util.Locale;
 
 public class CreateListActivity extends AppCompatActivity implements NameListFragment.IOnNameListDialogListener {
     final private int EDIT_CATEGORY_LIST_INTENT = 0;
@@ -72,6 +68,7 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
         createListView.setAdapter(listCreateAdapter);
 
         TextView emptyListView = (TextView) findViewById(R.id.emptyListViewEdit);
+        emptyListView.setText(R.string.no_grocery_items);
         createListView.setEmptyView(emptyListView);
 
         this.fab = (FloatingActionButton) findViewById(R.id.fab_edit);
@@ -85,15 +82,6 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
         this.fab_mic.setRippleColor(getResources().getColor(R.color.colorFabRipple));
         this.fab_mic.show();
         showFabWithAnimation(fab_mic, 300);
-
-        /*
-        if (createListView.getAdapter().getCount() == 0) {
-            Intent myIntent = new Intent(this, InstructionActivity.class);
-            myIntent.putExtra("Instruction", "Tap to select categories");
-            myIntent.putExtra("Title", "Create List");
-            startActivityForResult(myIntent, INSTRUCTION_INTENT);
-        }
-        */
 
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -113,14 +101,6 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
                     Intent activity = new Intent(getBaseContext(), RecordingActivity.class);
                     activity.putExtra("ListId", listId);
                     startActivityForResult(activity, SPEECH_RECOGNITION_INTENT);
-
-
-                    //startSpeechToText();
-                    /*if (!mIslistening)
-                    {
-                        mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-                        Toast.makeText(getBaseContext(), "Say grocery items separated by the word \'and\'...", Toast.LENGTH_LONG).show();
-                    }*/
                 }
             }
         });
@@ -197,25 +177,6 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
                 return true;
             }
         });
-    }
-
-    /**
-     * Start speech to text intent. This opens up Google Speech Recognition API dialog box to listen the speech input.
-     */
-    private void startSpeechToText() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-                "Say grocery items separated by the word \'and\'...");
-        try {
-            startActivityForResult(intent, SPEECH_RECOGNITION_INTENT);
-        } catch (ActivityNotFoundException a) {
-            Toast.makeText(getApplicationContext(),
-                    "Sorry! Speech recognition is not supported in this device.",
-                    Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override

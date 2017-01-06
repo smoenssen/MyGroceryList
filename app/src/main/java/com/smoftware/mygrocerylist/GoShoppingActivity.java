@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.File;
 
@@ -37,6 +38,11 @@ public class GoShoppingActivity extends AppCompatActivity {
         goShoppingAdapter = new GoShoppingAdapter(this);
         final ListView goShoppingView = (ListView)findViewById(R.id.shoppingList);
         goShoppingView.setAdapter(goShoppingAdapter);
+
+        TextView emptyListView = (TextView) findViewById(R.id.emptyListViewShopping);
+        emptyListView.setText(R.string.no_grocery_lists);
+        goShoppingView.setEmptyView(emptyListView);
+
         this.fabEmail = (FloatingActionButton)findViewById(R.id.fab_email);
         this.fabEmail.hide();
         this.fabGo = (FloatingActionButton)findViewById(R.id.fab_go);

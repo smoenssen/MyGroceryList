@@ -2,6 +2,9 @@
     <string name="app_name">My Grocery List</string>
 
     <string name="no_grocery_items">No grocery items.</string>
+    <string name="no_grocery_lists">No grocery lists.</string>
+    <string name="no_grocery_categories">No grocery categories.</string>
+
     <string name="fontsize_prompt">Choose a font size for printed list:</string>
     <string-array name="fontsize_array">
         <item>8</item>
