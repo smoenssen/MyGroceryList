@@ -245,12 +245,18 @@ public class GoShoppingAdapter extends BaseAdapter {
         {
             float y = ct.getYLine();
 
-            // setup table with 2 columns for checkbox and grocery item name
+            // setup table with 2 columns for checkbox (if included) and grocery item name
             PdfPTable table = new PdfPTable(2);
+            Tables.Settings include_chks = DbConnection.db(_context).getSetting(String.format("SELECT * FROM Settings WHERE Setting = \'%s\'", DbConnection.include_checkboxes));
 
             try {
                 table.setWidthPercentage(100f);
-                table.setWidths(new int[] { 25, 75 });
+
+                if (include_chks.Value.equals(DbConnection.TRUE))
+                    table.setWidths(new int[] { 25, 75 });
+                else
+                    table.setWidths(new int[] { 5, 95 });
+
                 table.setSpacingAfter(10f);
                 table.setTotalWidth(colWidth - 15);
             } catch (DocumentException e) {
@@ -280,11 +286,21 @@ public class GoShoppingAdapter extends BaseAdapter {
                 PdfPCell cell = new PdfPCell();
 
                 // checkbox
-                cell.addElement(new Chunk(img, 0, 0, true));
-                cell.setBorderWidth(0);
-                cell.setPaddingRight(0);
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                table.addCell(cell);
+                if (include_chks.Value.equals(DbConnection.TRUE)) {
+                    cell.addElement(new Chunk(img, 0, 0, true));
+                    cell.setBorderWidth(0);
+                    cell.setPaddingRight(0);
+                    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                    table.addCell(cell);
+                }
+                else {
+                    cell = new PdfPCell(new Phrase("", groceryItemFont));
+                    cell.setBorderWidth(0);
+                    cell.setPaddingLeft(0);
+                    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                    table.addCell(cell);
+                }
 
                 // grocery item
                 cell = new PdfPCell(new Phrase(item.Name, groceryItemFont));

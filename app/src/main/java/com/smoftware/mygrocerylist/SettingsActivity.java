@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -22,6 +23,7 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
     String _email;
     String _fontsize;
     String _numcols;
+    String _include_checkboxes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,34 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
             _numcols = setting.Value;
             spinnerNumCols.setSelection(adapterNumCols.getPosition(_numcols));
         }
+
+        // include checkboxes setting
+        final CheckBox checkbox = (CheckBox)findViewById(R.id.chk_include_checkboxes);
+
+        setting = DbConnection.db(this).getSetting(String.format("SELECT * FROM Settings WHERE Setting = \'%s\'", DbConnection.include_checkboxes));
+        if (setting != null)
+        {
+            _include_checkboxes = setting.Value;
+            checkbox.setChecked(_include_checkboxes.equals(DbConnection.TRUE));
+        }
+        else
+        {
+            // default
+            _include_checkboxes = DbConnection.TRUE;
+            checkbox.setChecked(true);
+        }
+
+        // event handler for checkbox clicked
+        checkbox.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (checkbox.isChecked())
+                    _include_checkboxes = DbConnection.TRUE;
+                else
+                    _include_checkboxes = DbConnection.FALSE;
+
+                OnSomethingModified();
+            }
+        });
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -164,6 +194,19 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
                 else
                 {
                     setting = new Tables.Settings(DbConnection.numcols, _numcols);
+                    DbConnection.db(getBaseContext()).updateSetting(setting);
+                }
+
+                // include checkboxes
+                setting = DbConnection.db(this).getSetting(String.format("SELECT * FROM Settings WHERE Setting = \'%s\'", DbConnection.include_checkboxes));
+                if (setting == null)
+                {
+                    setting = new Tables.Settings(DbConnection.include_checkboxes, _include_checkboxes);
+                    DbConnection.db(getBaseContext()).insertSetting(setting);
+                }
+                else
+                {
+                    setting = new Tables.Settings(DbConnection.include_checkboxes, _include_checkboxes);
                     DbConnection.db(getBaseContext()).updateSetting(setting);
                 }
 

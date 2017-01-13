@@ -87,5 +87,15 @@
                 android:layout_marginRight="8dp"
                 android:src="@mipmap/ic_expand_more_white_24dp" />
         </RelativeLayout>
+
+        <CheckBox
+            android:id="@+id/chk_include_checkboxes"
+            android:text="@string/include_checkboxes_prompt"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_centerVertical="true"
+            android:focusable="false"/>
     </LinearLayout>
 </LinearLayout>

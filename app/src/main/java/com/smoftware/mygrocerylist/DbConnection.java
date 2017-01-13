@@ -16,9 +16,12 @@ public class DbConnection {
     private SQLiteOpenHelper openHelper;
     private SQLiteDatabase database;
     private static DbConnection instance;
+    final public static String TRUE = "TRUE";
+    final public static String FALSE = "FALSE";
     final public static String email = "email";
     final public static String fontsize = "fontsize";
     final public static String numcols = "numcols";
+    final public static String include_checkboxes = "include_checkboxes";
 
     /**
      * Private constructor to avoid object creation from outside classes.

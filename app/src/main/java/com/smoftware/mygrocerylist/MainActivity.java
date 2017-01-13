@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         this.getDrawable(R.mipmap.ic_shopping_cart_white_24dp).setTint(getResources().getColor(R.color.PaleGreen));
         this.getDrawable(R.mipmap.ic_manage_lists_white_24dp).setTint(getResources().getColor(R.color.MediumPurple));
         this.getDrawable(R.mipmap.ic_settings_white_24dp).setTint(getResources().getColor(R.color.PowderBlue));
+        this.getDrawable(R.mipmap.ic_cloud_queue_white_24dp).setTint(getResources().getColor(R.color.Coral));
 
         setContentView(R.layout.activity_main);
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Button goShoppingBtn = (Button) findViewById(R.id.goShoppingButton);
         Button manageListsBtn = (Button) findViewById(R.id.manageListsButton);
         Button settingsBtn = (Button) findViewById(R.id.settingsButton);
+        Button cloudBtn = (Button) findViewById(R.id.cloudButton);
 
         createListBtn.setTextColor(Color.WHITE);
         createListBtn.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cloudBtn.setTextColor(Color.WHITE);
+        cloudBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), CloudActivity.class);
                 startActivity(intent);
             }
         });
