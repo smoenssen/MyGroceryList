@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         this.getDrawable(R.mipmap.ic_shopping_cart_white_24dp).setTint(getResources().getColor(R.color.PaleGreen));
         this.getDrawable(R.mipmap.ic_manage_lists_white_24dp).setTint(getResources().getColor(R.color.MediumPurple));
         this.getDrawable(R.mipmap.ic_settings_white_24dp).setTint(getResources().getColor(R.color.PowderBlue));
-        this.getDrawable(R.mipmap.ic_cloud_queue_white_24dp).setTint(getResources().getColor(R.color.Coral));
+        this.getDrawable(R.mipmap.ic_cow_white_24dp).setTint(getResources().getColor(R.color.Coral));
 
         setContentView(R.layout.activity_main);
 

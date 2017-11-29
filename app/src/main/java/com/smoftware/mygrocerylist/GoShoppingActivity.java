@@ -73,7 +73,7 @@ public class GoShoppingActivity extends AppCompatActivity {
                         Intent email = new Intent(Intent.ACTION_SEND);
                         //email.PutExtra(Android.Content.Intent.ExtraEmail, new string[] { "steve.moenssen@gmail.com" });
                         email.putExtra(Intent.EXTRA_EMAIL, new String[]{setting.Value});
-                        email.putExtra(Intent.EXTRA_SUBJECT, listName.toString());
+                        email.putExtra(Intent.EXTRA_SUBJECT, listName);
                         email.putExtra(Intent.EXTRA_STREAM, uri);
                         email.setType("message/rfc822");
                         startActivity(email);
