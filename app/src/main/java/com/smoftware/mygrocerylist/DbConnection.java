@@ -1,6 +1,9 @@
 package com.smoftware.mygrocerylist;
 
 //http://www.javahelps.com/2015/04/import-and-use-external-database-in.html
+//
+//code:
+//https://www.programcreek.com/java-api-examples/index.php?source_dir=android-sqlite-asset-helper-master/library/src/main/java/com/readystatesoftware/sqliteasset/SQLiteAssetHelper.java
 
 import android.content.ContentValues;
 import android.content.Context;

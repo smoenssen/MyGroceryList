@@ -90,8 +90,27 @@ public class EditCategoryListActivity extends AppCompatActivity implements AddCa
 
                     alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            editCategoryListAdapter.DeleteCategory((int)catId);
-                            Toast.makeText(getBaseContext(), String.format("%s deleted", catName), Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder confirm = new AlertDialog.Builder(EditCategoryListActivity.this);
+                            confirm.setTitle("Delete Category");
+                            confirm.setMessage("Are you sure you want to delete " + catName + " from the database?");
+
+                            confirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    editCategoryListAdapter.DeleteCategory((int)catId);
+                                    Toast.makeText(getBaseContext(), String.format("%s deleted", catName), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                            confirm.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    // do nothing
+                                }
+                            });
+
+                            Dialog dialog2 = confirm.create();
+                            dialog2.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+                            dialog2.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                            dialog2.show();
                         }
                     });
                 }

@@ -155,6 +155,7 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
 
     public int AddGroceryItem(String name, int isSelected)
     {
+        name = name.replace("\'", "\'\'");
         String query = String.format("SELECT * FROM GroceryItem WHERE Name = \'%s\' AND CatId = %d", name, _catId);
         List<Tables.GroceryItem> groceryItemList = db(_context).getGroceryItemList(query);
         if (groceryItemList.size() == 0)
@@ -179,6 +180,7 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
 
     public void EditGroceryItem(String oldName, String newName)
     {
+        oldName = oldName.replace("\'", "\'\'");
         String query = String.format("SELECT * FROM GroceryItem WHERE Name = \'%s\'", oldName);
         List<Tables.GroceryItem> groceryItemList = db(_context).getGroceryItemList(query);
         if (groceryItemList.size() > 0)

@@ -92,7 +92,6 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
                 alert.setNeutralButton("Edit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
                         DisplayAddGroceryItemDialog((String) itemName);
-                        Toast.makeText(getBaseContext(), String.format("%s updated", itemName), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -225,6 +224,7 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
             {
                 // editing a GroceryItem
                 editGroceryItemListAdapter.EditGroceryItem(oldText, newText);
+                Toast.makeText(getBaseContext(), String.format("%s updated", oldText), Toast.LENGTH_SHORT).show();
             }
         }
     }
