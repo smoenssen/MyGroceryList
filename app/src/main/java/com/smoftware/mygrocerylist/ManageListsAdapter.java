@@ -137,20 +137,24 @@ public class ManageListsAdapter extends BaseAdapter {
     public void DeleteList(long listId)
     {
         db(_context).runQuery(String.format("DELETE FROM GroceryList WHERE _id = %d", listId));
+        db(_context).runQuery(String.format("DELETE FROM ListCategoryGroceryItem WHERE ListId = %d", listId));
         RefreshAndNotify();
     }
 
     public int DeleteCheckedLists()
     {
-        List<Tables.GroceryList> itemToDelete = null;
-        itemToDelete = db(_context).getGroceryList("SELECT * FROM GroceryList WHERE IsSelectedForDeletion = 1");
+        List<Tables.GroceryList> itemsToDelete = null;
+        itemsToDelete = db(_context).getGroceryList("SELECT * FROM GroceryList WHERE IsSelectedForDeletion = 1");
 
-        if (itemToDelete.size() > 0)
-            db(_context).runQuery("DELETE FROM GroceryList WHERE IsSelectedForDeletion = 1");
+        if (itemsToDelete.size() > 0) {
+            for (Tables.GroceryList groceryList : itemsToDelete) {
+                DeleteList(groceryList._id);
+            }
+        }
 
         RefreshAndNotify();
 
-        return (itemToDelete.size());
+        return (itemsToDelete.size());
     }
 
     public int AddList(String name, String icon)

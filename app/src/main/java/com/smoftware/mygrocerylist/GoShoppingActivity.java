@@ -52,7 +52,7 @@ public class GoShoppingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (fabEmail != null) {
                     if (isExternalStorageWritable()) {
-                        File folder = getStorageDir(getBaseContext(), "com.smoftware.mygrocerylist");
+                        File folder = DatabaseOpenHelper.getStorageDir(getBaseContext());
 
                         File pdfFile = new File(folder, "mygrocerylist.pdf");
                         if (pdfFile.exists()) {
@@ -85,6 +85,7 @@ public class GoShoppingActivity extends AppCompatActivity {
 
         fabGo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                // todo
             }
         });
 
@@ -146,15 +147,5 @@ public class GoShoppingActivity extends AppCompatActivity {
             return true;
         }
         return false;
-    }
-
-    public File getStorageDir(Context context, String dirName) {
-        // Get the directory for the app's private documents directory.
-        File file = new File(context.getExternalFilesDir(
-                Environment.DIRECTORY_DOCUMENTS), dirName);
-        if (!file.mkdirs()) {
-            //Toast.makeText(context, "Error creating directory!", Toast.LENGTH_SHORT).show();
-        }
-        return file;
     }
 }

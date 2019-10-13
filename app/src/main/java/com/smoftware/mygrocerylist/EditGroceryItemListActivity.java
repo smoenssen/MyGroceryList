@@ -84,8 +84,27 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
 
                 alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        editGroceryItemListAdapter.DeleteGroceryItem(itemId);
-                        Toast.makeText(getBaseContext(), String.format("%s deleted", itemName), Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder confirm = new AlertDialog.Builder(EditGroceryItemListActivity.this);
+                        confirm.setTitle("Delete Grocery Item");
+                        confirm.setMessage("Are you sure you want to permanently delete " + itemName + " from the database?");
+
+                        confirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                editGroceryItemListAdapter.DeleteGroceryItem(itemId);
+                                Toast.makeText(getBaseContext(), String.format("%s deleted", itemName), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        confirm.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // do nothing
+                            }
+                        });
+
+                        Dialog dialog2 = confirm.create();
+                        dialog2.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+                        dialog2.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                        dialog2.show();
                     }
                 });
 

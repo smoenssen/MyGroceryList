@@ -97,5 +97,13 @@
             android:layout_marginTop="25dp"
             android:layout_centerVertical="true"
             android:focusable="false"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="Restore Database"
+            android:id="@+id/restore_button"
+            android:enabled="true" />
     </LinearLayout>
 </LinearLayout>

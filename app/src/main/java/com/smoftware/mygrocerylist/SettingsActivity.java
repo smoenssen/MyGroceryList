@@ -1,5 +1,6 @@
 package com.smoftware.mygrocerylist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -38,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
         setTitle("Settings");
 
         EditText email = (EditText)findViewById(R.id.editTextEmail);
+        Button restoreBtn = (Button)findViewById(R.id.restore_button);
 
         // email setting
         Tables.Settings setting = DbConnection.db(this).getSetting(String.format("SELECT * FROM Settings WHERE Setting = \'%s\'", DbConnection.email));
@@ -53,6 +56,13 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 _email = s.toString();
                 OnSomethingModified();
+            }
+        });
+
+        restoreBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), RestoreDatabaseActivity.class);
+                startActivity(intent);
             }
         });
 

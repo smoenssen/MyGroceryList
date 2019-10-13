@@ -92,7 +92,7 @@ public class EditCategoryListActivity extends AppCompatActivity implements AddCa
                         public void onClick(DialogInterface dialog, int id) {
                             AlertDialog.Builder confirm = new AlertDialog.Builder(EditCategoryListActivity.this);
                             confirm.setTitle("Delete Category");
-                            confirm.setMessage("Are you sure you want to delete " + catName + " from the database?");
+                            confirm.setMessage("Are you sure you want to permanently delete " + catName + " from the database?");
 
                             confirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,int id) {

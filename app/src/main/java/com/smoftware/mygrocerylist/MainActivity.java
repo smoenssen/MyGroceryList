@@ -13,6 +13,8 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Backup database
+        DatabaseOpenHelper.createDbBackup(getApplicationContext());
 
         DbConnection.db(this).open();
 
