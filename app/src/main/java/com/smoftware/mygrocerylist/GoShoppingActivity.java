@@ -48,7 +48,6 @@ public class GoShoppingActivity extends AppCompatActivity {
         this.fabEmail = (FloatingActionButton)findViewById(R.id.fab_email);
         this.fabEmail.hide();
         this.fabGo = (FloatingActionButton)findViewById(R.id.fab_go);
-        this.fabGo.hide();
 
         fabEmail.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

@@ -3,6 +3,10 @@ package com.smoftware.mygrocerylist.shopping;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
 import com.smoftware.mygrocerylist.DbConnection;
@@ -29,6 +33,8 @@ public class GoShoppingListActivity extends AppCompatActivity {
 
         setContentView(R.layout.go_shopping_list);
 
+        setTitle("Let's go shopping!");
+
         listId = getIntent().getLongExtra("ListId", 0);
         listName = getIntent().getStringExtra("ListName");
 
@@ -36,6 +42,18 @@ public class GoShoppingListActivity extends AppCompatActivity {
         categoryListItems = setCategoryGroups(listId);
         goShoppingListAdapter = new GoShoppingListAdapter(GoShoppingListActivity.this, categoryListItems);
         expandableListView.setAdapter(goShoppingListAdapter);
+
+        expandableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // srm - in order for this to fire I needed to set android:focusable="false" for the items in the layout file
+                long itemId = expandableListView.getAdapter().getItemId(position);
+                int x;
+                x=0;
+                //int checkOpposite = goShoppingListAdapter.GetItemIsSelected(position) == 0 ? 1 : 0;
+                //goShoppingListAdapter.SetItemCheck(itemId, checkOpposite);
+            }
+        });
     }
 
     public ArrayList<CategoryGroup> setCategoryGroups(long listId) {
@@ -114,5 +132,25 @@ public class GoShoppingListActivity extends AppCompatActivity {
         list.add(gru2);
 
         return list;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
