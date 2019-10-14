@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.smoftware.mygrocerylist.shopping.GoShoppingListActivity;
+
 import java.io.File;
 
 public class GoShoppingActivity extends AppCompatActivity {
@@ -85,7 +87,15 @@ public class GoShoppingActivity extends AppCompatActivity {
 
         fabGo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // todo
+                long listId = goShoppingView.getAdapter().getItemId(position);
+                String listName = (String)goShoppingView.getAdapter().getItem(position);
+
+                fabGo.hide();
+                Intent myIntent = new Intent(getBaseContext(), GoShoppingListActivity.class);
+                myIntent.putExtra("ListId", listId);
+                myIntent.putExtra("ListName", (String)listName);
+                myIntent.putExtra("EditMode", true);
+                startActivityForResult(myIntent, 2);
             }
         });
 

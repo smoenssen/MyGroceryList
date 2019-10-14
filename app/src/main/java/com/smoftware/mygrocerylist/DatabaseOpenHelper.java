@@ -85,12 +85,14 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
         File folder = new File(dbDirectory);
         File[] listOfFiles = folder.listFiles();
 
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                String fileName = listOfFiles[i].getName();
-                if (fileName.contains(DATABASE_NAME) &&
-                        fileName.length() == (DATABASE_NAME.length() + TIMESTAMP_FORMAT.length() + 1)) {
-                    list.add(fileName);
+        if (listOfFiles != null) {
+            for (int i = 0; i < listOfFiles.length; i++) {
+                if (listOfFiles[i].isFile()) {
+                    String fileName = listOfFiles[i].getName();
+                    if (fileName.contains(DATABASE_NAME) &&
+                            fileName.length() == (DATABASE_NAME.length() + TIMESTAMP_FORMAT.length() + 1)) {
+                        list.add(fileName);
+                    }
                 }
             }
         }

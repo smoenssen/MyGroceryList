@@ -4,8 +4,8 @@ package com.smoftware.mygrocerylist;
  * Created by steve on 12/16/16.
  */
 
-final class Tables {
-    static class GroceryList
+public final class Tables {
+    public static class GroceryList
     {
         //[PrimaryKey, AutoIncrement, Column("_id")]
         public int _id;
@@ -18,7 +18,7 @@ final class Tables {
     }
 
     // Master Category table
-    static class Category
+    public static class Category
     {
         //[PrimaryKey, AutoIncrement, Column("_id")]
         public int _id;
@@ -31,7 +31,7 @@ final class Tables {
     }
 
     // Master grocery item table
-    static class GroceryItem
+    public static class GroceryItem
     {
         //[PrimaryKey, AutoIncrement, Column("_id")]
         public int _id;
@@ -47,7 +47,7 @@ final class Tables {
     //  List specific tables
     //      These are used after a list is saved and in maintaining a list.
     */
-    static class ListCategory
+    public static class ListCategory
     {
         public int ListId;
         public int CatId;
@@ -56,7 +56,7 @@ final class Tables {
         public ListCategory(int listId, int catId) { ListId = listId; CatId = catId; }
     }
 
-    static class ListCategoryGroceryItem
+    public static class ListCategoryGroceryItem
     {
         public int ListId;
         public int CatId;
@@ -71,7 +71,7 @@ final class Tables {
     /*
     //  Misc. tables
     */
-    static class Settings
+    public static class Settings
     {
         //[PrimaryKey]
         public String Setting;
