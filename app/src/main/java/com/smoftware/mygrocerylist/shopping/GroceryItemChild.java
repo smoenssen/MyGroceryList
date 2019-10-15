@@ -2,11 +2,12 @@ package com.smoftware.mygrocerylist.shopping;
 
 import android.widget.CheckBox;
 
+import com.smoftware.mygrocerylist.Tables;
+
 public class GroceryItemChild {
 
     private String name;
-    private String tag;
-    private CheckBox checkBox;
+    private Tables.ListCategoryGroceryItem listCategoryGroceryItem;
 
     public String getName() {
         return name;
@@ -16,12 +17,8 @@ public class GroceryItemChild {
         this.name = name;
     }
 
-    public String getTag() {
-        return tag;
-    }
+    public Tables.ListCategoryGroceryItem getListCategoryGroceryItem() { return listCategoryGroceryItem; }
 
-    public void setTag(String Tag) {
-        this.tag = Tag;
-    }
+    public void setListCategoryGroceryItem(Tables.ListCategoryGroceryItem listCategoryGroceryItem) {this.listCategoryGroceryItem = listCategoryGroceryItem; }
 }
 

@@ -18,10 +18,7 @@ import java.util.List;
 
 public class GoShoppingListActivity extends AppCompatActivity {
     private GoShoppingListAdapter goShoppingListAdapter;
-    private ArrayList<CategoryGroup> categoryListItems;
     private ExpandableListView expandableListView;
-    private long listId = 0;
-    private String listName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,25 +32,13 @@ public class GoShoppingListActivity extends AppCompatActivity {
 
         setTitle("Let's go shopping!");
 
-        listId = getIntent().getLongExtra("ListId", 0);
-        listName = getIntent().getStringExtra("ListName");
+        long listId = getIntent().getLongExtra("ListId", 0);
+        String listName = getIntent().getStringExtra("ListName");
 
         expandableListView = (ExpandableListView) findViewById(R.id.ExpandableList);
-        categoryListItems = setCategoryGroups(listId);
-        goShoppingListAdapter = new GoShoppingListAdapter(GoShoppingListActivity.this, categoryListItems);
+        ArrayList<CategoryGroup> categoryListItems = setCategoryGroups(listId);
+        goShoppingListAdapter = new GoShoppingListAdapter(GoShoppingListActivity.this, expandableListView, (int)listId, categoryListItems);
         expandableListView.setAdapter(goShoppingListAdapter);
-
-        expandableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // srm - in order for this to fire I needed to set android:focusable="false" for the items in the layout file
-                long itemId = expandableListView.getAdapter().getItemId(position);
-                int x;
-                x=0;
-                //int checkOpposite = goShoppingListAdapter.GetItemIsSelected(position) == 0 ? 1 : 0;
-                //goShoppingListAdapter.SetItemCheck(itemId, checkOpposite);
-            }
-        });
     }
 
     public ArrayList<CategoryGroup> setCategoryGroups(long listId) {
@@ -69,6 +54,8 @@ public class GoShoppingListActivity extends AppCompatActivity {
         for (Tables.Category category : catList) {
             ArrayList<GroceryItemChild> groceryItemChildren = new ArrayList<>();
             CategoryGroup group = new CategoryGroup();
+
+            group.setCategoryId(category._id);
             group.setCategory(category.Name);
 
             // add grocery items for this category
@@ -78,58 +65,24 @@ public class GoShoppingListActivity extends AppCompatActivity {
             List<Tables.GroceryItem> itemList = DbConnection.db(getBaseContext()).getGroceryItemList(query);
 
             for (Tables.GroceryItem item : itemList) {
+                query = String.format("SELECT * FROM ListCategoryGroceryItem WHERE GroceryItemId = %d AND CatId = %d AND ListId = %d", item._id, category._id, listId);
                 GroceryItemChild childItem = new GroceryItemChild();
+                List<Tables.ListCategoryGroceryItem> listCategoryGroceryItems = DbConnection.db(getBaseContext()).getListCategoryGroceryItemList(query);
+
+                if (listCategoryGroceryItems.size() > 0) {
+                    childItem.setListCategoryGroceryItem(listCategoryGroceryItems.get(0));
+                }
+
                 childItem.setName(item.Name);
                 groceryItemChildren.add(childItem);
             }
-
-            group.setSubText(String.format("%d items", itemList.size()));
+/*
+            query = String.format("SELECT COUNT (*) FROM ListCategoryGroceryItem WHERE IsPurchased = 0 AND ListId = %d AND CatId = %d", listId, category._id);
+            int count = DbConnection.db(getBaseContext()).getCount(query);
+            group.setSubText(String.format("%d items left to buy", count));*/
             group.setItems(groceryItemChildren);
             list.add(group);
         }
-
-        return list;
-    }
-
-    public ArrayList<CategoryGroup> SetStandardGroups() {
-        ArrayList<CategoryGroup> list = new ArrayList<>();
-        ArrayList<GroceryItemChild> list2 = new ArrayList<>();
-        CategoryGroup gru1 = new CategoryGroup();
-        gru1.setCategory("Comedy");
-        gru1.setSubText("5 items");
-        GroceryItemChild ch1_1 = new GroceryItemChild();
-        ch1_1.setName("A movie");
-        ch1_1.setTag(null);
-        list2.add(ch1_1);
-        GroceryItemChild ch1_2 = new GroceryItemChild();
-        ch1_2.setName("An other movie");
-        ch1_2.setTag(null);
-        list2.add(ch1_2);
-        GroceryItemChild ch1_3 = new GroceryItemChild();
-        ch1_3.setName("And an other movie");
-        ch1_3.setTag(null);
-        list2.add(ch1_3);
-        gru1.setItems(list2);
-        list2 = new ArrayList<>();
-
-        CategoryGroup gru2 = new CategoryGroup();
-        gru2.setCategory("Action");
-        gru2.setSubText("15 items");
-        GroceryItemChild ch2_1 = new GroceryItemChild();
-        ch2_1.setName("A movie");
-        ch2_1.setTag(null);
-        list2.add(ch2_1);
-        GroceryItemChild ch2_2 = new GroceryItemChild();
-        ch2_2.setName("An other movie");
-        ch2_2.setTag(null);
-        list2.add(ch2_2);
-        GroceryItemChild ch2_3 = new GroceryItemChild();
-        ch2_3.setName("And an other movie");
-        ch2_3.setTag(null);
-        list2.add(ch2_3);
-        gru2.setItems(list2);
-        list.add(gru1);
-        list.add(gru2);
 
         return list;
     }

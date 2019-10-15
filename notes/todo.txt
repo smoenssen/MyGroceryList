@@ -6,3 +6,4 @@ Add Go Shopping feature that displays list of only items that are selected
 Add support for input of number of grocery items to get
 Add support for import/export database (try using Drive)
 What's wrong with voice recognition?
+Different image for Other category

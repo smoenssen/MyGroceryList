@@ -48,6 +48,7 @@ public class GoShoppingActivity extends AppCompatActivity {
         this.fabEmail = (FloatingActionButton)findViewById(R.id.fab_email);
         this.fabEmail.hide();
         this.fabGo = (FloatingActionButton)findViewById(R.id.fab_go);
+        this.fabGo.hide();
 
         fabEmail.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -89,7 +90,6 @@ public class GoShoppingActivity extends AppCompatActivity {
                 long listId = goShoppingView.getAdapter().getItemId(position);
                 String listName = (String)goShoppingView.getAdapter().getItem(position);
 
-                fabGo.hide();
                 Intent myIntent = new Intent(getBaseContext(), GoShoppingListActivity.class);
                 myIntent.putExtra("ListId", listId);
                 myIntent.putExtra("ListName", (String)listName);

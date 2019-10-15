@@ -274,6 +274,21 @@ public class DbConnection {
     /*
     **    ListCategoryGroceryItem Queries
     */
+    public int updateListCategoryGroceryItem(Tables.ListCategoryGroceryItem record) {
+        // New value(s)
+        ContentValues values = new ContentValues();
+        values.put("ListId", record.ListId);
+        values.put("CatId", record.CatId);
+        values.put("GroceryItemId", record.GroceryItemId);
+        values.put("IsPurchased", record.IsPurchased);
+
+        // Which row to update
+        String where = "ListId LIKE ? AND CatId LIKE ? AND GroceryItemId LIKE ?";
+        String[] whereArgs = { String.format("%d", record.ListId), String.format("%d", record.CatId), String.format("%d", record.GroceryItemId) };
+
+        return database.update("ListCategoryGroceryItem", values, where, whereArgs);
+    }
+
     public List<Tables.ListCategoryGroceryItem> getListCategoryGroceryItemList(String query) {
         List<Tables.ListCategoryGroceryItem> list = new ArrayList<>();
         Cursor cursor = database.rawQuery(query, null);
