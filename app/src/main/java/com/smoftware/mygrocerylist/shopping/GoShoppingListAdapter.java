@@ -6,11 +6,13 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,6 +52,31 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
         this.context = context;
         this.expandableListView = expandableListView;
         this.categoryGroups = groups;
+
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                final GroceryItemChild child = (GroceryItemChild) getChild(groupPosition, childPosition);
+                setGroceryItemPurchased(child, groupPosition);
+                return true;
+            }
+        });
+    }
+
+    private void setGroceryItemPurchased(GroceryItemChild groceryItemChild, int groupPosition) {
+        Tables.ListCategoryGroceryItem groceryItem = groceryItemChild.getListCategoryGroceryItem();
+
+        groceryItem.IsPurchased = groceryItem.IsPurchased == 0 ? 1 : 0;
+        db(context).updateListCategoryGroceryItem(groceryItem);
+
+        // if all items are purchased, collapse the category
+        String query = String.format("SELECT COUNT (*) FROM ListCategoryGroceryItem WHERE IsPurchased = 0 AND ListId = %d AND CatId = %d", listId, groceryItem.CatId);
+        int count = DbConnection.db(context).getCount(query);
+        if (count == 0) {
+            expandableListView.collapseGroup(groupPosition);
+        }
+
+        notifyDataSetChanged();
     }
 
     public void addItem(GroceryItemChild item, CategoryGroup group) {
@@ -74,7 +101,7 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         GroceryItemChild child = (GroceryItemChild) getChild(groupPosition, childPosition);
         ChildListViewHolder viewHolder;
 
@@ -92,57 +119,17 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
 
             // store the holder with the view.
             convertView.setTag(viewHolder);
-            viewHolder.checkBox.setTag(viewHolder);
-            viewHolder.textView.setTag(viewHolder);
-
-            // event handler for checkbox clicked
-            viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    ChildListViewHolder clickedHolder = (ChildListViewHolder) v.getTag();
-                    setGroceryItemPurchased(clickedHolder, false);
-                }
-            });
-
-            // event handler for textview clicked
-            viewHolder.textView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    ChildListViewHolder clickedHolder = (ChildListViewHolder) v.getTag();
-                    setGroceryItemPurchased(clickedHolder, true);
-                    clickedHolder.checkBox.setChecked(!clickedHolder.checkBox.isChecked());
-                }
-            });
         }
         else
         {
             viewHolder = (ChildListViewHolder)convertView.getTag();
+            Log.i("tag", String.format("group = %d, child = %d, %s", groupPosition, childPosition, child.getName()));
         }
 
         viewHolder.checkBox.setChecked(child.getListCategoryGroceryItem().IsPurchased == 1);
         viewHolder.textView.setText(child.getName());
 
         return convertView;
-    }
-
-    private void setGroceryItemPurchased(ChildListViewHolder clickedItem, boolean checkOpposite) {
-        Tables.ListCategoryGroceryItem groceryItemPurchased = clickedItem.groceryItemChild.getListCategoryGroceryItem();
-
-        if (checkOpposite) {
-            groceryItemPurchased.IsPurchased = clickedItem.checkBox.isChecked() ? 0 : 1;
-        }
-        else {
-            groceryItemPurchased.IsPurchased = clickedItem.checkBox.isChecked() ? 1 : 0;
-        }
-
-        db(context).updateListCategoryGroceryItem(groceryItemPurchased);
-/*
-        // if all items are purchased, collapse the category
-        String query = String.format("SELECT COUNT (*) FROM ListCategoryGroceryItem WHERE IsPurchased = 0 AND ListId = %d AND CatId = %d", listId, currentGroceryItem.CatId);
-        int count = DbConnection.db(context).getCount(query);
-        if (count == 0) {
-            expandableListView.collapseGroup(groupPosition);
-        }
-*/
-        notifyDataSetChanged();
     }
 
     @Override
@@ -184,8 +171,6 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
 
             // store the holder with the view.
             convertView.setTag(viewHolder);
-            //viewHolder.mainTextView.setTag(viewHolder);
-            //viewHolder.subTextView.setTag(viewHolder);
         }
         else
         {
