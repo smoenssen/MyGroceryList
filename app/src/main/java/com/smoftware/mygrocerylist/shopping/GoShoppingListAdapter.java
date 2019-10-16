@@ -25,6 +25,7 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
 
     public class GroupListViewHolder
     {
+        public int position;
         public ImageView imageView;
         public TextView mainTextView;
         public TextView subTextView;
@@ -32,6 +33,8 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
 
     public class ChildListViewHolder
     {
+        public int parentPosition;
+        public GroceryItemChild groceryItemChild;
         public CheckBox checkBox;
         public TextView textView;
     }
@@ -70,14 +73,10 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
         return childPosition;
     }
 
-    Tables.ListCategoryGroceryItem currentGroceryItem;
-
     @Override
     public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final GroceryItemChild child = (GroceryItemChild) getChild(groupPosition, childPosition);
+        GroceryItemChild child = (GroceryItemChild) getChild(groupPosition, childPosition);
         ChildListViewHolder viewHolder;
-
-        currentGroceryItem = child.getListCategoryGroceryItem();
 
         if (convertView == null) {
             // inflate the layout
@@ -86,6 +85,8 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
 
             // set up the ViewHolder
             viewHolder = new ChildListViewHolder();
+            viewHolder.groceryItemChild = child;
+            viewHolder.parentPosition = groupPosition;
             viewHolder.textView = (TextView)convertView.findViewById(R.id.textCheckbox);
             viewHolder.checkBox = (CheckBox)convertView.findViewById(R.id.chk);
 
@@ -97,20 +98,17 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
             // event handler for checkbox clicked
             viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    currentGroceryItem = child.getListCategoryGroceryItem();
                     ChildListViewHolder clickedHolder = (ChildListViewHolder) v.getTag();
-                    setCurrentGroceryItemPurchased(clickedHolder.checkBox.isChecked(), groupPosition);
+                    setGroceryItemPurchased(clickedHolder, false);
                 }
             });
 
             // event handler for textview clicked
             viewHolder.textView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    currentGroceryItem = child.getListCategoryGroceryItem();
                     ChildListViewHolder clickedHolder = (ChildListViewHolder) v.getTag();
-                    int checkOpposite = currentGroceryItem.IsPurchased == 0 ? 1 : 0;
-                    setCurrentGroceryItemPurchased(checkOpposite == 1, groupPosition);
-                    clickedHolder.checkBox.setChecked(currentGroceryItem.IsPurchased == 1);
+                    setGroceryItemPurchased(clickedHolder, true);
+                    clickedHolder.checkBox.setChecked(!clickedHolder.checkBox.isChecked());
                 }
             });
         }
@@ -119,23 +117,31 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
             viewHolder = (ChildListViewHolder)convertView.getTag();
         }
 
-        viewHolder.checkBox.setChecked(currentGroceryItem.IsPurchased == 1);
+        viewHolder.checkBox.setChecked(child.getListCategoryGroceryItem().IsPurchased == 1);
         viewHolder.textView.setText(child.getName());
 
         return convertView;
     }
 
-    private void setCurrentGroceryItemPurchased(boolean isPurchased, int groupPosition) {
-        currentGroceryItem.IsPurchased = isPurchased ? 1 : 0;
-        db(context).updateListCategoryGroceryItem(currentGroceryItem);
+    private void setGroceryItemPurchased(ChildListViewHolder clickedItem, boolean checkOpposite) {
+        Tables.ListCategoryGroceryItem groceryItemPurchased = clickedItem.groceryItemChild.getListCategoryGroceryItem();
 
+        if (checkOpposite) {
+            groceryItemPurchased.IsPurchased = clickedItem.checkBox.isChecked() ? 0 : 1;
+        }
+        else {
+            groceryItemPurchased.IsPurchased = clickedItem.checkBox.isChecked() ? 1 : 0;
+        }
+
+        db(context).updateListCategoryGroceryItem(groceryItemPurchased);
+/*
         // if all items are purchased, collapse the category
         String query = String.format("SELECT COUNT (*) FROM ListCategoryGroceryItem WHERE IsPurchased = 0 AND ListId = %d AND CatId = %d", listId, currentGroceryItem.CatId);
         int count = DbConnection.db(context).getCount(query);
         if (count == 0) {
             expandableListView.collapseGroup(groupPosition);
         }
-
+*/
         notifyDataSetChanged();
     }
 
