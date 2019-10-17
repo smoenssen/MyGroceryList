@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,16 +56,21 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
                 final GroceryItemChild child = (GroceryItemChild) getChild(groupPosition, childPosition);
-                setGroceryItemPurchased(child, groupPosition);
+                setGroceryItemCheck(child, groupPosition);
                 return true;
             }
         });
     }
 
-    private void setGroceryItemPurchased(GroceryItemChild groceryItemChild, int groupPosition) {
+    private void setGroceryItemCheck(GroceryItemChild groceryItemChild, int groupPosition) {
         Tables.ListCategoryGroceryItem groceryItem = groceryItemChild.getListCategoryGroceryItem();
 
+        // reverse check and update item
         groceryItem.IsPurchased = groceryItem.IsPurchased == 0 ? 1 : 0;
+        updateGroceryItem(groupPosition, groceryItem);
+    }
+
+    private void updateGroceryItem(int groupPosition, Tables.ListCategoryGroceryItem groceryItem) {
         db(context).updateListCategoryGroceryItem(groceryItem);
 
         // if all items are purchased, collapse the category
@@ -74,6 +78,19 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
         int count = DbConnection.db(context).getCount(query);
         if (count == 0) {
             expandableListView.collapseGroup(groupPosition);
+        }
+
+        notifyDataSetChanged();
+    }
+
+    public void setAllSelect(int position, int selection) {
+        CategoryGroup group = (CategoryGroup)getGroup(position);
+        ArrayList<GroceryItemChild> groceryItemChildren = group.getItems();
+
+        for (GroceryItemChild child : groceryItemChildren) {
+            Tables.ListCategoryGroceryItem groceryItem = child.getListCategoryGroceryItem();
+            groceryItem.IsPurchased = selection;
+            updateGroceryItem(position, groceryItem);
         }
 
         notifyDataSetChanged();

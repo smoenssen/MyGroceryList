@@ -3,7 +3,9 @@ package com.smoftware.mygrocerylist.shopping;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +21,7 @@ import java.util.List;
 public class GoShoppingListActivity extends AppCompatActivity {
     private GoShoppingListAdapter goShoppingListAdapter;
     private ExpandableListView expandableListView;
+    private int longClickedGroupPos = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +38,49 @@ public class GoShoppingListActivity extends AppCompatActivity {
         long listId = getIntent().getLongExtra("ListId", 0);
         String listName = getIntent().getStringExtra("ListName");
 
-        expandableListView = (ExpandableListView) findViewById(R.id.ExpandableList);
+        expandableListView = (ExpandableListView) findViewById(R.id.go_shopping_expandable_list);
         ArrayList<CategoryGroup> categoryListItems = setCategoryGroups(listId);
         goShoppingListAdapter = new GoShoppingListAdapter(GoShoppingListActivity.this, expandableListView, (int)listId, categoryListItems);
         expandableListView.setAdapter(goShoppingListAdapter);
+
+        // register so that context menu can be displayed in long click
+        registerForContextMenu(expandableListView);
+
+        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (expandableListView.getPackedPositionChild(id) == -1) {
+                    // a group has been selected, show context menu
+                    longClickedGroupPos = ExpandableListView.getPackedPositionGroup(expandableListView.getExpandableListPosition(position));
+                    openContextMenu(expandableListView);
+                }
+
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.go_shopping_expandable_list) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.options_menu_expandable_list, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_select_all_children:
+                goShoppingListAdapter.setAllSelect(longClickedGroupPos, 1);
+                return true;
+            case R.id.action_unselect_all_children:
+                goShoppingListAdapter.setAllSelect(longClickedGroupPos, 0);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     public ArrayList<CategoryGroup> setCategoryGroups(long listId) {
