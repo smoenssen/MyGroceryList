@@ -2,6 +2,7 @@ package com.smoftware.mygrocerylist;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -37,7 +38,7 @@ public class RestoreDatabaseActivity extends AppCompatActivity {
         setTitle("Restore Database");
 
         restoreDatabaseAdapter = new RestoreDatabaseAdapter(this);
-        final ListView restoreDatabaseView = (ListView)findViewById(R.id.iconListView);
+        ListView restoreDatabaseView = (ListView)findViewById(R.id.iconListView);
         restoreDatabaseView.setAdapter(restoreDatabaseAdapter);
 
         ArrayList<String> list = DatabaseOpenHelper.getBackupDatabaseListFromAppContext(getApplicationContext());
@@ -46,7 +47,7 @@ public class RestoreDatabaseActivity extends AppCompatActivity {
         restoreDatabaseView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final String dbToRestore = (String)restoreDatabaseView.getAdapter().getItem(position);
+                final String dbToRestore = (String)restoreDatabaseAdapter.getItem(position);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(RestoreDatabaseActivity.this);
                 alert.setTitle("Restore Database");
@@ -56,7 +57,8 @@ public class RestoreDatabaseActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         DatabaseOpenHelper.restoreDbFromBackup(getApplicationContext(), dbToRestore);
                         Toast.makeText(getBaseContext(), "Database restored", Toast.LENGTH_SHORT).show();
-                        finish();
+                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                        startActivity(intent);
                     }
                 });
 

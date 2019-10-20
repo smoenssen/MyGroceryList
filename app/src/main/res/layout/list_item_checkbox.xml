@@ -22,5 +22,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:focusable="false"
-        android:onClick="onCheckboxClicked"/>
+        android:onClick="onCheckboxClicked"
+        android:buttonTint="#b4f0b4"/>
 </RelativeLayout>

@@ -46,14 +46,20 @@ public class NameListFragment extends DialogFragment {
         Button buttonCancel = (Button)view.findViewById(R.id.cancelButton);
         Button buttonSave = (Button)view.findViewById(R.id.saveButton);
 
-        TextView title = (TextView)view.findViewById(R.id.textView1);
+        TextView title = (TextView)view.findViewById(R.id.textTitle);
         title.setText("Name");
 
-        TextView descr = (TextView)view.findViewById(R.id.textView2);
+        TextView descr = (TextView)view.findViewById(R.id.textInstructions);
         descr.setText("Enter a name for the list");
 
         final EditText editText = (EditText)view.findViewById(R.id.editText);
         editText.setText(oldName, TextView.BufferType.EDITABLE);
+
+        final TextView quantityLabel = (TextView)view.findViewById(R.id.labelQuantity);
+        quantityLabel.setVisibility(View.GONE);
+
+        final EditText editQuantity = (EditText)view.findViewById(R.id.editQuantity);
+        editQuantity.setVisibility(View.GONE);
 
         ShowKeyboard(editText);
 

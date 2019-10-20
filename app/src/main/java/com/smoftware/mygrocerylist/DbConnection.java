@@ -229,6 +229,7 @@ public class DbConnection {
         values.put("CatId", record.CatId);
         values.put("Name", record.Name);
         values.put("IsSelected", record.IsSelected);
+        values.put("Quantity", record.Quantity);
 
         // Which row to update
         String where = "_id LIKE ?";
@@ -242,6 +243,7 @@ public class DbConnection {
         values.put("CatId", record.CatId);
         values.put("Name", record.Name);
         values.put("IsSelected", record.IsSelected);
+        values.put("Quantity", record.Quantity);
 
         return (int)database.insert ("GroceryItem", null, values);
     }
@@ -258,6 +260,7 @@ public class DbConnection {
                 g.Name = cursor.getString(cursor.getColumnIndexOrThrow("Name"));
                 g.CatId = cursor.getInt(cursor.getColumnIndexOrThrow("CatId"));;
                 g.IsSelected = cursor.getInt(cursor.getColumnIndexOrThrow("IsSelected"));
+                g.Quantity = cursor.getInt(cursor.getColumnIndexOrThrow("Quantity"));
                 list.add(g);
             }
             catch (Exception e)
@@ -281,6 +284,7 @@ public class DbConnection {
         values.put("CatId", record.CatId);
         values.put("GroceryItemId", record.GroceryItemId);
         values.put("IsPurchased", record.IsPurchased);
+        values.put("Quantity", record.Quantity);
 
         // Which row to update
         String where = "ListId LIKE ? AND CatId LIKE ? AND GroceryItemId LIKE ?";
@@ -301,6 +305,7 @@ public class DbConnection {
                 g.CatId = cursor.getInt(cursor.getColumnIndexOrThrow("CatId"));
                 g.GroceryItemId = cursor.getInt(cursor.getColumnIndexOrThrow("GroceryItemId"));
                 g.IsPurchased = cursor.getInt(cursor.getColumnIndexOrThrow("IsPurchased"));
+                g.Quantity = cursor.getInt(cursor.getColumnIndexOrThrow("Quantity"));
                 list.add(g);
             }
             catch (Exception e)
@@ -320,6 +325,7 @@ public class DbConnection {
         values.put("CatId", record.CatId);
         values.put("GroceryItemId", record.GroceryItemId);
         values.put("IsPurchased", record.IsPurchased);
+        values.put("Quantity", record.Quantity);
 
         return (int)database.insert ("ListCategoryGroceryItem", null, values);
     }

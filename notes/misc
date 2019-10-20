@@ -3,3 +3,6 @@ To test restoring from Auto Backkup:
 adb shell bmgr restore 3bfd41283a0084c6 com.smoftware.mygrocerylist.mygrocerylist
 
 To view sqlite database run "sqlitebrowser"
+
+icon generator
+https://romannurik.github.io/AndroidAssetStudio/index.html

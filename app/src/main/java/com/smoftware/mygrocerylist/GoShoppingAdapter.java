@@ -86,9 +86,9 @@ public class GoShoppingAdapter extends BaseAdapter {
 
             // set up the ViewHolder
             viewHolder = new ViewShoppingListHolder();
-            viewHolder.TextView1 = (TextView)convertView.findViewById(R.id.mainText);
-            viewHolder.TextView2 = (TextView)convertView.findViewById(R.id.subText);
-            viewHolder.ImageView = (ImageView)convertView.findViewById(R.id.Image);
+            viewHolder.TextView1 = convertView.findViewById(R.id.mainText);
+            viewHolder.TextView2 = convertView.findViewById(R.id.subText);
+            viewHolder.ImageView = convertView.findViewById(R.id.Image);
 
             // store the holder with the view.
             convertView.setTag(viewHolder);

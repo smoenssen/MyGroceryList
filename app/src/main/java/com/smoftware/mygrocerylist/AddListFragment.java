@@ -46,22 +46,28 @@ public class AddListFragment extends DialogFragment {
         Button buttonCancel = (Button)view.findViewById(R.id.cancelButton);
         Button buttonSave = (Button)view.findViewById(R.id.saveButton);
 
-        TextView title = (TextView)view.findViewById(R.id.textView1);
-        TextView descr = (TextView)view.findViewById(R.id.textView2);
+        TextView title = (TextView)view.findViewById(R.id.textTitle);
+        TextView instructions = (TextView)view.findViewById(R.id.textInstructions);
 
         if (oldName.equals(""))
         {
             title.setText("Add List");
-            descr.setText("Enter the name of a new list");
+            instructions.setText("Enter the name of a new list");
         }
         else
         {
             title.setText("Edit Name");
-            descr.setText("Enter a new name for the list");
+            instructions.setText("Enter a new name for the list");
         }
 
         final EditText editText = (EditText)view.findViewById(R.id.editText);
         editText.setText(oldName, TextView.BufferType.EDITABLE);
+
+        final TextView quantityLabel = (TextView)view.findViewById(R.id.labelQuantity);
+        quantityLabel.setVisibility(View.GONE);
+
+        final EditText editQuantity = (EditText)view.findViewById(R.id.editQuantity);
+        editQuantity.setVisibility(View.GONE);
 
         ShowKeyboard(editText);
 

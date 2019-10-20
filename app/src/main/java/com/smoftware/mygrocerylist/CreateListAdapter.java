@@ -205,9 +205,10 @@ public class CreateListAdapter extends BaseAdapter {
             // ListCategoryGroceryItem table entries
             for (Tables.GroceryItem groceryItem : groceryItemList)
             {
-                //if (groceryItem.IsSelected)
+                if (groceryItem.IsSelected == 1)
                 {
-                    Tables.ListCategoryGroceryItem listCatGroceryItem = new Tables.ListCategoryGroceryItem(listId, category._id, groceryItem._id, 0);
+                    //todo should isPurchased default to 0 here?
+                    Tables.ListCategoryGroceryItem listCatGroceryItem = new Tables.ListCategoryGroceryItem(listId, category._id, groceryItem._id, 0, groceryItem.Quantity);
                     DbConnection.db(_context).insertListCategoryGroceryItem(listCatGroceryItem);
                 }
             }

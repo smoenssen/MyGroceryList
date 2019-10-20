@@ -131,8 +131,8 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
             viewHolder = new ChildListViewHolder();
             viewHolder.groceryItemChild = child;
             viewHolder.parentPosition = groupPosition;
-            viewHolder.textView = (TextView)convertView.findViewById(R.id.textCheckbox);
-            viewHolder.checkBox = (CheckBox)convertView.findViewById(R.id.chk);
+            viewHolder.textView = convertView.findViewById(R.id.textCheckbox);
+            viewHolder.checkBox = convertView.findViewById(R.id.chk);
 
             // store the holder with the view.
             convertView.setTag(viewHolder);
@@ -182,9 +182,9 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
 
             // set up the ViewHolder
             viewHolder = new GroupListViewHolder();
-            viewHolder.mainTextView = (TextView)convertView.findViewById(R.id.mainText);
-            viewHolder.subTextView = (TextView)convertView.findViewById(R.id.subText);
-            viewHolder.imageView = (ImageView)convertView.findViewById(R.id.Image);
+            viewHolder.mainTextView = convertView.findViewById(R.id.mainText);
+            viewHolder.subTextView = convertView.findViewById(R.id.subText);
+            viewHolder.imageView = convertView.findViewById(R.id.Image);
 
             // store the holder with the view.
             convertView.setTag(viewHolder);
@@ -202,14 +202,14 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
             viewHolder.subTextView.setTextColor(Color.rgb(180, 240, 180));
         }
         else {
-            group.setSubText(String.format("%d items left to BUY", count));
+            group.setSubText(String.format("%d items left to buy", count));
             viewHolder.subTextView.setTextColor(Color.rgb(240, 125, 111));
         }
 
         viewHolder.mainTextView.setText(group.getCategory());
         viewHolder.subTextView.setText(group.getSubText());
 
-        String image = "ic_cake_white_24dp"; //todo default
+        String image = "outline_local_grocery_store_white_24dp";
         query = String.format("SELECT * FROM Category WHERE _id = %d", group.getCategoryId());
         List<Tables.Category> categoryList = DbConnection.db(context).getCategoryList(query);
         if (categoryList.size() != 0) {

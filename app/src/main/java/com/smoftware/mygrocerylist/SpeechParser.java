@@ -68,7 +68,7 @@ public class SpeechParser {
                     if (listCategoryGroceryItemList.size() == 0)
                     {
                         // insert new ListCategoryGroceryItem
-                        Tables.ListCategoryGroceryItem listCategoryGroceryItem = new Tables.ListCategoryGroceryItem(listId, groceryItem.CatId, groceryItem._id, 0);
+                        Tables.ListCategoryGroceryItem listCategoryGroceryItem = new Tables.ListCategoryGroceryItem(listId, groceryItem.CatId, groceryItem._id, 0, 1);
                         db(_context).insertListCategoryGroceryItem(listCategoryGroceryItem);
                     }
                 }
@@ -89,7 +89,7 @@ public class SpeechParser {
                     catIdOther = category._id;
                 }
 
-                Tables.GroceryItem groceryItem = new Tables.GroceryItem(catIdOther, item, 1);
+                Tables.GroceryItem groceryItem = new Tables.GroceryItem(catIdOther, item, 1, 1);
                 db(_context).insertGroceryItem(groceryItem);
 
                 if (listId != 0) {

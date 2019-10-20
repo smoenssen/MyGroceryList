@@ -37,14 +37,14 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
         final long listId = getIntent().getLongExtra("ListId", 0);
 
         editGroceryItemListAdapter = new EditGroceryItemListAdapter(this, catId, listId);
-        final ListView editGroceryItemListView = (ListView)findViewById(R.id.iconListViewAdd);
+        final ListView editGroceryItemListView = findViewById(R.id.iconListViewAdd);
         editGroceryItemListView.setAdapter(editGroceryItemListAdapter);
 
-        TextView emptyListView = (TextView) findViewById(R.id.emptyListViewAdd);
+        TextView emptyListView = findViewById(R.id.emptyListViewAdd);
         emptyListView.setText(R.string.no_grocery_items);
         editGroceryItemListView.setEmptyView(emptyListView);
 
-        this.fab = (FloatingActionButton)findViewById(R.id.fab_add);
+        this.fab = findViewById(R.id.fab_add);
         this.fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
         this.fab.setRippleColor(getResources().getColor(R.color.colorFabRipple));
 
@@ -55,7 +55,7 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
             public void onClick(View v) {
                 if (fab != null)
                 {
-                    DisplayAddGroceryItemDialog("");
+                    DisplayAddGroceryItemDialog("", 1);
                 }
             }
         });
@@ -74,8 +74,9 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 // prompt to confirm deletion
-                final long itemId = editGroceryItemListView.getAdapter().getItemId(position);
-                final String itemName = (String)editGroceryItemListView.getAdapter().getItem(position);
+                final long itemId = editGroceryItemListAdapter.getItemId(position);
+                final String itemName = editGroceryItemListAdapter.getItem(position);
+                final int quantity = editGroceryItemListAdapter.getItemQuantity(position);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(EditGroceryItemListActivity.this);
                 alert.setTitle("Modify Grocery Item");
@@ -110,7 +111,7 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
 
                 alert.setNeutralButton("Edit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        DisplayAddGroceryItemDialog((String) itemName);
+                        DisplayAddGroceryItemDialog(itemName, quantity);
                     }
                 });
 
@@ -202,7 +203,7 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
         }
     }
 
-    public void DisplayAddGroceryItemDialog(String itemName)
+    public void DisplayAddGroceryItemDialog(String itemName, int quantity)
     {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -218,22 +219,23 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
         // Create and show the dialog.
         Bundle args = new Bundle();
         args.putString("name", itemName);
+        args.putInt("quantity", quantity);
         AddGroceryItemFragment newFragment = AddGroceryItemFragment.newInstance(args);
         newFragment.show(ft, "AddGroceryItemFragment");
     }
 
-    public void OnAddGroceryItemDialogListener(String newText, String oldText)
+    public void OnAddGroceryItemDialogListener(String newText, String oldText, int quantity)
     {
         if (newText.equals(""))
         {
-            DisplayAddGroceryItemAlert("Add Grocery Item", "Grocery item cannot be empty.");
+            DisplayAddGroceryItemAlert("Grocery Item", "Grocery item cannot be empty.");
         }
         else
         {
             if (oldText.equals(""))
             {
                 // adding new GroceryItem
-                if (editGroceryItemListAdapter.AddGroceryItem(newText, 1) == 0)
+                if (editGroceryItemListAdapter.AddGroceryItem(newText, 1, quantity) == 0)
                 {
                     String text = String.format("\'%s\' Grocery item already exists.", newText);
                     DisplayAddGroceryItemAlert("Add Grocery Item", text);
@@ -242,7 +244,7 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
             else
             {
                 // editing a GroceryItem
-                editGroceryItemListAdapter.EditGroceryItem(oldText, newText);
+                editGroceryItemListAdapter.EditGroceryItem(oldText, newText, quantity);
                 Toast.makeText(getBaseContext(), String.format("%s updated", oldText), Toast.LENGTH_SHORT).show();
             }
         }
@@ -256,7 +258,7 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
 
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int id) {
-                DisplayAddGroceryItemDialog("");
+                DisplayAddGroceryItemDialog("", 1);
             }
         });
 

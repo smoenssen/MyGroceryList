@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.smoftware.mygrocerylist.mygrocerylist"
         minSdkVersion 21
-        targetSdkVersion 23
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -18,22 +18,20 @@ android {
     }
     productFlavors {
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     // these are necessary for fab button
-
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.google.android.gms:play-services-appindexing:9.8.0'
-    compile 'com.android.support:design:24.2.1'
-    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
-    compile 'com.android.support:support-v4:24.2.1'
-
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.google.android.gms:play-services-appindexing:9.8.0'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    implementation 'com.android.support:support-v4:27.1.1'
     // pdf support
-    compile 'com.itextpdf:itextg:5.5.10'
+    implementation 'com.itextpdf:itextg:5.5.10'
 }

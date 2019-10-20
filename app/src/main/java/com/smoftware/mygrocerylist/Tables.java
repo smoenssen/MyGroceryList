@@ -38,9 +38,10 @@ public final class Tables {
         public int CatId;
         public String Name;
         public int IsSelected;
+        public int Quantity;
 
         public GroceryItem() {}
-        public GroceryItem(int catId, String name, int isSelected) { CatId = catId; Name = name; IsSelected = isSelected; }
+        public GroceryItem(int catId, String name, int isSelected, int quantity) { CatId = catId; Name = name; IsSelected = isSelected; Quantity = quantity; }
     }
 
     /*
@@ -62,10 +63,11 @@ public final class Tables {
         public int CatId;
         public int GroceryItemId;
         public int IsPurchased;
+        public int Quantity;
 
         public ListCategoryGroceryItem() {}
-        public ListCategoryGroceryItem(int listId, int catId, int groceryItemId, int isPurchased)
-                                        { ListId = listId; CatId = catId; GroceryItemId = groceryItemId; IsPurchased = isPurchased; }
+        public ListCategoryGroceryItem(int listId, int catId, int groceryItemId, int isPurchased, int quantity)
+                                        { ListId = listId; CatId = catId; GroceryItemId = groceryItemId; IsPurchased = isPurchased; Quantity = quantity; }
     }
 
     /*

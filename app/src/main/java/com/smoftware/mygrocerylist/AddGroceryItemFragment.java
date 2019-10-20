@@ -21,7 +21,7 @@ public class AddGroceryItemFragment extends DialogFragment {
     private AddGroceryItemFragment.IOnAddGroceryItemDialogListener _callback;
 
     public interface IOnAddGroceryItemDialogListener {
-        void OnAddGroceryItemDialogListener(String newText, String oldText);
+        void OnAddGroceryItemDialogListener(String newText, String oldText, int quantity);
     }
 
     Context _context = null;
@@ -41,20 +41,24 @@ public class AddGroceryItemFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         final String oldName = getArguments().getString("name");
+        final int oldQuantity = getArguments().getInt("quantity");
 
         // Use this to return your custom view for this Fragment
         View view = inflater.inflate(R.layout.input_dialog, container, false);
         Button buttonCancel = (Button)view.findViewById(R.id.cancelButton);
         Button buttonSave = (Button)view.findViewById(R.id.saveButton);
 
-        TextView title = (TextView)view.findViewById(R.id.textView1);
-        title.setText("Add Grocery Item");
+        TextView title = (TextView)view.findViewById(R.id.textTitle);
+        title.setText("Grocery Item");
 
-        TextView descr = (TextView)view.findViewById(R.id.textView2);
-        descr.setText("Enter the name of a new grocery item");
+        TextView descr = (TextView)view.findViewById(R.id.textInstructions);
+        descr.setText("Enter the name and quantity");
 
         final EditText editText = (EditText)view.findViewById(R.id.editText);
         editText.setText(oldName, TextView.BufferType.EDITABLE);
+
+        final EditText editQuantity = (EditText)view.findViewById(R.id.editQuantity);
+        editQuantity.setText(String.format("%d", oldQuantity), TextView.BufferType.EDITABLE);
 
         ShowKeyboard(editText);
 
@@ -68,6 +72,7 @@ public class AddGroceryItemFragment extends DialogFragment {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String text = editText.getText().toString().trim();
+                int quantity = Integer.parseInt(editQuantity.getText().toString().trim());
 
                 if (text.equals(""))
                 {
@@ -76,7 +81,7 @@ public class AddGroceryItemFragment extends DialogFragment {
                 else
                 {
                     if (_callback != null) {
-                        _callback.OnAddGroceryItemDialogListener(text, oldName);
+                        _callback.OnAddGroceryItemDialogListener(text, oldName, quantity);
                         HideKeyboard(editText);
                         dismiss();
                     }

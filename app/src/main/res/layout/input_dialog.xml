@@ -5,26 +5,57 @@
     android:layout_alignParentBottom="true"
     android:padding="30dp">
     <TextView
-        android:text="Add Item"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="TEXT TO BE SET IN CODE"
+        android:textSize="24sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1" />
+        android:id="@+id/textTitle" />
     <TextView
-        android:text="Enter the name of a new item"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="TEXT TO BE SET IN CODE"
+        android:textSize="18sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:layout_marginTop="10dp" />
-    <EditText
+        android:id="@+id/textInstructions"
+        android:layout_marginTop="18dp" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:inputType="textCapSentences"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890()'-+% "
-        android:maxLength="64"
-        android:id="@+id/editText" />
+        android:layout_marginTop="12dp">
+        <TextView
+            android:text="Name:"
+            android:textSize="18sp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:paddingRight="16dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:inputType="textCapSentences"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890()'-+% "
+            android:id="@+id/editText" />
+    </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="Qty:"
+            android:textSize="18sp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:paddingRight="16dp"
+            android:id="@+id/labelQuantity" />
+        <EditText
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:maxLines="1"
+            android:digits="1234567890"
+            android:maxLength="10"
+            android:id="@+id/editQuantity" />
+    </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"

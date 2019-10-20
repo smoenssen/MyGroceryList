@@ -62,6 +62,11 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
         return _groceryItemList.get(position).IsSelected;
     }
 
+    public int getItemQuantity(int position)
+    {
+        return _groceryItemList.get(position).Quantity;
+    }
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent)
     {
@@ -104,7 +109,14 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
         else
             imgIcon = _context.getResources().getIdentifier("ic_label_outline_white_24dp", "mipmap", _context.getPackageName());
 
-        viewHolder.TextView.setText(_groceryItemList.get(position).Name);
+        int quantity = GetQuantity(_groceryItemList.get(position)._id);
+        if (quantity > 1) {
+            viewHolder.TextView.setText(String.format("(%d) %s", quantity, _groceryItemList.get(position).Name));
+        }
+        else {
+            viewHolder.TextView.setText(_groceryItemList.get(position).Name);
+        }
+
         viewHolder.CheckBox.setChecked(_groceryItemList.get(position).IsSelected == 1);
         viewHolder.TextView.setCompoundDrawablesWithIntrinsicBounds(imgIcon, 0, 0, 0);
         return convertView;
@@ -112,6 +124,7 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
 
     public void Refresh()
     {
+
         if (_listId != 0)
         {
             // get list of ALL grocery items for this list/category
@@ -153,7 +166,7 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
         _activity.OnSomethingModified();
     }
 
-    public int AddGroceryItem(String name, int isSelected)
+    public int AddGroceryItem(String name, int isSelected, int quantity)
     {
         name = name.replace("\'", "\'\'");
         String query = String.format("SELECT * FROM GroceryItem WHERE Name = \'%s\' AND CatId = %d", name, _catId);
@@ -161,7 +174,7 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
         if (groceryItemList.size() == 0)
         {
             // insert new GroceryItem
-            Tables.GroceryItem groceryItem = new Tables.GroceryItem((int)_catId, name, isSelected);
+            Tables.GroceryItem groceryItem = new Tables.GroceryItem((int)_catId, name, isSelected, quantity);
             int id = db(_context).insertGroceryItem(groceryItem);
             RefreshAndNotify();
 
@@ -178,7 +191,7 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
         RefreshAndNotify();
     }
 
-    public void EditGroceryItem(String oldName, String newName)
+    public void EditGroceryItem(String oldName, String newName, int quantity)
     {
         oldName = oldName.replace("\'", "\'\'");
         String query = String.format("SELECT * FROM GroceryItem WHERE Name = \'%s\'", oldName);
@@ -190,11 +203,51 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
             groceryItem.CatId = groceryItemList.get(0).CatId;
             groceryItem.Name = newName;
             groceryItem.IsSelected = groceryItemList.get(0).IsSelected;
+            groceryItem.Quantity = quantity;
 
             db(_context).updateGroceryItem(groceryItem);
         }
 
         RefreshAndNotify();
+    }
+
+    public int GetQuantity(long itemId) {
+        int quantity = 0;
+
+        if (_listId != 0)
+        {
+            String query = String.format("SELECT * FROM ListCategoryGroceryItem " +
+                    "WHERE ListId = %d AND CatId = %d AND GroceryItemId = %d", _listId, _catId, (int)itemId);
+            List<Tables.ListCategoryGroceryItem> listCategoryGroceryItemList = db(_context).getListCategoryGroceryItemList(query);
+
+            if (listCategoryGroceryItemList.size() > 0)
+            {
+                Tables.ListCategoryGroceryItem item = listCategoryGroceryItemList.get(0);
+                if (item == null) {
+                    quantity = 1;
+                }
+                else {
+                    quantity = item.Quantity;
+                }
+            }
+        }
+        else {
+            String query = String.format("SELECT * FROM GroceryItem WHERE _id = %d", (int)itemId);
+            List<Tables.GroceryItem> groceryItemList = db(_context).getGroceryItemList(query);
+
+            if (groceryItemList.size() > 0)
+            {
+                Tables.GroceryItem item = groceryItemList.get(0);
+                if (item == null) {
+                    quantity = 1;
+                }
+                else {
+                    quantity = item.Quantity;
+                }
+            }
+        }
+
+        return quantity;
     }
 
     public void SetItemCheck(long itemId, int check)
@@ -209,7 +262,7 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
             if (listCategoryGroceryItemList.size() == 0 && check == 1)
             {
                 // add
-                Tables.ListCategoryGroceryItem listItem = new Tables.ListCategoryGroceryItem((int)_listId, (int)_catId, (int)itemId, 0);
+                Tables.ListCategoryGroceryItem listItem = new Tables.ListCategoryGroceryItem((int)_listId, (int)_catId, (int)itemId, 0, 1);
                 db(_context).insertListCategoryGroceryItem(listItem);
             }
             else if (listCategoryGroceryItemList.size() > 0 && check == 0)

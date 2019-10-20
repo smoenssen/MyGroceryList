@@ -5,6 +5,7 @@ package com.smoftware.mygrocerylist;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -81,6 +82,10 @@ public class CloudActivity extends AppCompatActivity {
     }
 
     private void emailDatabase(String fileToSend) {
+        // Added the following to fix issue with exception "exposed beyond app through ClipData.Item.getUri()"
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
         File file = new File(fileToSend);
         file.setReadable(true, false);
 

@@ -38,7 +38,7 @@ public class GoShoppingListActivity extends AppCompatActivity {
         long listId = getIntent().getLongExtra("ListId", 0);
         String listName = getIntent().getStringExtra("ListName");
 
-        expandableListView = (ExpandableListView) findViewById(R.id.go_shopping_expandable_list);
+        expandableListView = findViewById(R.id.go_shopping_expandable_list);
         ArrayList<CategoryGroup> categoryListItems = setCategoryGroups(listId);
         goShoppingListAdapter = new GoShoppingListAdapter(GoShoppingListActivity.this, expandableListView, (int)listId, categoryListItems);
         expandableListView.setAdapter(goShoppingListAdapter);
@@ -118,10 +118,7 @@ public class GoShoppingListActivity extends AppCompatActivity {
                 childItem.setName(item.Name);
                 groceryItemChildren.add(childItem);
             }
-/*
-            query = String.format("SELECT COUNT (*) FROM ListCategoryGroceryItem WHERE IsPurchased = 0 AND ListId = %d AND CatId = %d", listId, category._id);
-            int count = DbConnection.db(getBaseContext()).getCount(query);
-            group.setSubText(String.format("%d items left to buy", count));*/
+
             group.setItems(groceryItemChildren);
             list.add(group);
         }
