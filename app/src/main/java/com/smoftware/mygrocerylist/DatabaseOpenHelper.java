@@ -1,7 +1,9 @@
 package com.smoftware.mygrocerylist;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
@@ -10,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -63,6 +66,41 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
         DbConnection.db(dbContext).close();
         deleteFile(currentDbPath);
         copyFile(backupDbPath, currentDbPath);
+        DbConnection.db(dbContext).open();
+    }
+
+    public static void replaceDatabase(InputStream in, OutputStream out) {
+
+        DbConnection.db(dbContext).close();
+        //deleteFile(currentDbPath);
+
+        try {
+            byte[] buffer = new byte[4096];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+
+            in.close();
+
+            out.flush();
+            out.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DbConnection.db(dbContext).open();
+    }
+    public static void replaceDatabase(Context applicationContext, String inputDatabasePath) {
+        String dbDirectory = getDatabaseDirectory(applicationContext);
+        String currentDbPath = dbDirectory + DATABASE_NAME + ".test";
+
+        DbConnection.db(dbContext).close();
+        deleteFile(currentDbPath);
+        copyFile(inputDatabasePath, currentDbPath);
         DbConnection.db(dbContext).open();
     }
 

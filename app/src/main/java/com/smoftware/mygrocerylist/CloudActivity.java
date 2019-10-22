@@ -3,20 +3,35 @@ package com.smoftware.mygrocerylist;
 //http://androidexample.com/Upload_File_To_Server_-_Android_Example/index.php?view=article_discription&aid=83
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Objects;
+
+import static com.smoftware.mygrocerylist.DatabaseOpenHelper.replaceDatabase;
 
 public class CloudActivity extends AppCompatActivity {
 
@@ -77,8 +92,93 @@ public class CloudActivity extends AppCompatActivity {
                 // Currently, a database can be imported by putting the new database
                 // in the app's assets. The existing app needs to be uninstalled to
                 // replace the database.
+                Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+                chooseFile.setType("*/*");
+                chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+                startActivityForResult(chooseFile, 0);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case 0:
+                    /*
+                    Uri content_describer = data.getData();
+                    String src = content_describer.getPath();
+                    File  source = new File(src);
+
+                    Log.d("src is ", source.toString());
+                    String filename = content_describer.getLastPathSegment();
+                    //text.setText(filename);
+                    Log.d("FileName is ",filename);
+                    File destination = new File(DatabaseOpenHelper.getDatabasePath(getApplicationContext()));
+                    Log.d("Destination is ", destination.toString());
+*/
+                    //DatabaseOpenHelper.replaceDatabase(getApplicationContext(), source.getAbsolutePath());
+                    Uri uri_src = data.getData();
+                    //Uri uri_dest = Uri.parse(new File(DatabaseOpenHelper.getDatabasePath(getApplicationContext())).toString() + ".test");
+
+                    try {
+                        InputStream in = getContentResolver().openInputStream(uri_src);
+
+                        File f = new File(DatabaseOpenHelper.getDatabasePath(getApplicationContext()));
+                        f.setWritable(true, false);
+                        OutputStream out = new FileOutputStream(f);
+
+                        //ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri_dest, "w");
+                        //FileOutputStream out = new FileOutputStream(pfd.getFileDescriptor());
+
+                        DatabaseOpenHelper.replaceDatabase(in, out);
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
+            }
+        }
+    }
+
+
+
+    private void copy(File source, File destination) throws IOException {
+
+        FileChannel in = new FileInputStream(source).getChannel();
+        FileChannel out = new FileOutputStream(destination).getChannel();
+
+        try {
+            in.transferTo(0, in.size(), out);
+        } catch(Exception e){
+            Log.d("Exception", e.toString());
+        } finally {
+            if (in != null)
+                in.close();
+            if (out != null)
+                out.close();
+        }
+    }
+
+    private String getPath(Uri uri) {
+
+        String path = null;
+        String[] projection = { MediaStore.Files.FileColumns.DATA };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+
+        if(cursor == null){
+            path = uri.getPath();
+        }
+        else{
+            cursor.moveToFirst();
+            int column_index = cursor.getColumnIndexOrThrow(projection[0]);
+            path = cursor.getString(column_index);
+            cursor.close();
+        }
+
+        return ((path == null || path.isEmpty()) ? (uri.getPath()) : path);
     }
 
     private void emailDatabase(String fileToSend) {
