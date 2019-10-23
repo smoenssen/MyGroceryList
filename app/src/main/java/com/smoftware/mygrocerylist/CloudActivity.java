@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -106,79 +108,50 @@ public class CloudActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 0:
-                    /*
-                    Uri content_describer = data.getData();
-                    String src = content_describer.getPath();
-                    File  source = new File(src);
-
-                    Log.d("src is ", source.toString());
-                    String filename = content_describer.getLastPathSegment();
-                    //text.setText(filename);
-                    Log.d("FileName is ",filename);
-                    File destination = new File(DatabaseOpenHelper.getDatabasePath(getApplicationContext()));
-                    Log.d("Destination is ", destination.toString());
-*/
-                    //DatabaseOpenHelper.replaceDatabase(getApplicationContext(), source.getAbsolutePath());
                     Uri uri_src = data.getData();
-                    //Uri uri_dest = Uri.parse(new File(DatabaseOpenHelper.getDatabasePath(getApplicationContext())).toString() + ".test");
+                    String filename = getFileName(uri_src);
 
                     try {
-                        InputStream in = getContentResolver().openInputStream(uri_src);
-
-                        File f = new File(DatabaseOpenHelper.getDatabasePath(getApplicationContext()));
-                        f.setWritable(true, false);
-                        OutputStream out = new FileOutputStream(f);
-
-                        //ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri_dest, "w");
-                        //FileOutputStream out = new FileOutputStream(pfd.getFileDescriptor());
-
-                        DatabaseOpenHelper.replaceDatabase(in, out);
+                        // Verify database before importing it
+                        if (DatabaseOpenHelper.verifyDatabase(getApplicationContext(), getContentResolver().openInputStream(uri_src))) {
+                            DatabaseOpenHelper.replaceDatabase(getApplicationContext(), getContentResolver().openInputStream(uri_src));
+                            Toast.makeText(getBaseContext(), filename + " imported successfully", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(getBaseContext(), filename + " is not a valid database", Toast.LENGTH_LONG).show();
+                        }
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
 
+                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                    startActivity(intent);
                     break;
             }
         }
     }
 
-
-
-    private void copy(File source, File destination) throws IOException {
-
-        FileChannel in = new FileInputStream(source).getChannel();
-        FileChannel out = new FileOutputStream(destination).getChannel();
-
-        try {
-            in.transferTo(0, in.size(), out);
-        } catch(Exception e){
-            Log.d("Exception", e.toString());
-        } finally {
-            if (in != null)
-                in.close();
-            if (out != null)
-                out.close();
+    private String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
         }
-    }
-
-    private String getPath(Uri uri) {
-
-        String path = null;
-        String[] projection = { MediaStore.Files.FileColumns.DATA };
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-
-        if(cursor == null){
-            path = uri.getPath();
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
         }
-        else{
-            cursor.moveToFirst();
-            int column_index = cursor.getColumnIndexOrThrow(projection[0]);
-            path = cursor.getString(column_index);
-            cursor.close();
-        }
-
-        return ((path == null || path.isEmpty()) ? (uri.getPath()) : path);
+        return result;
     }
 
     private void emailDatabase(String fileToSend) {

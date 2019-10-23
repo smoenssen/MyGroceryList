@@ -1,6 +1,8 @@
 package com.smoftware.mygrocerylist;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
@@ -69,11 +71,61 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
         DbConnection.db(dbContext).open();
     }
 
-    public static void replaceDatabase(InputStream in, OutputStream out) {
+    public static boolean verifyDatabase(Context applicationContext, InputStream in) {
+        String dbDirectory = getDatabaseDirectory(applicationContext);
+        String dbTestPath = dbDirectory + "test.db";
+        File f = new File(dbTestPath);
+        f.setWritable(true, false);
+        OutputStream out = null;
 
+        try {
+            out = new FileOutputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        writeDatase(in, out);
+
+        try {
+            //todo how to catch invalid database
+            //android.database.sqlite.SQLiteDatabaseCorruptException: file is not a database (code 26 SQLITE_NOTADB): , while compiling: PRAGMA journal_mode
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(dbTestPath, null, 0);
+            int version = db.getVersion();
+            db.close();
+
+            if (version == DATABASE_VERSION) {
+                return true;
+            }
+        }
+        catch (SQLiteDatabaseCorruptException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        deleteFile(dbTestPath);
+
+        return false;
+    }
+
+    public static void replaceDatabase(Context applicationContext, InputStream in) {
         DbConnection.db(dbContext).close();
         //deleteFile(currentDbPath);
 
+        File f = new File(DatabaseOpenHelper.getDatabasePath(applicationContext));
+        f.setWritable(true, false);
+        OutputStream out = null;
+
+        try {
+            out = new FileOutputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        writeDatase(in, out);
+        DbConnection.db(dbContext).open();
+    }
+
+    private static void writeDatase(InputStream in, OutputStream out) {
         try {
             byte[] buffer = new byte[4096];
             int len;
@@ -91,17 +143,6 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        DbConnection.db(dbContext).open();
-    }
-    public static void replaceDatabase(Context applicationContext, String inputDatabasePath) {
-        String dbDirectory = getDatabaseDirectory(applicationContext);
-        String currentDbPath = dbDirectory + DATABASE_NAME + ".test";
-
-        DbConnection.db(dbContext).close();
-        deleteFile(currentDbPath);
-        copyFile(inputDatabasePath, currentDbPath);
-        DbConnection.db(dbContext).open();
     }
 
     public static ArrayList<String> getBackupDatabaseListFromAppContext(Context applicationContext) {
