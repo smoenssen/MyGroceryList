@@ -101,7 +101,7 @@ public class GoShoppingListActivity extends AppCompatActivity {
             group.setCategory(category.Name);
 
             // add grocery items for this category
-            query = String.format("SELECT DISTINCT gi._id, gi.CatId, gi.Name, gi.IsSelected FROM GroceryItem gi " +
+            query = String.format("SELECT DISTINCT gi._id, gi.CatId, gi.Name, gi.IsSelected, gi.Quantity FROM GroceryItem gi " +
                     "INNER JOIN ListCategoryGroceryItem l ON l.GroceryItemId = gi._id " +
                     "WHERE l.CatId = %d AND l.ListId = %d ORDER BY gi.Name", category._id, listId);
             List<Tables.GroceryItem> itemList = DbConnection.db(getBaseContext()).getGroceryItemList(query);

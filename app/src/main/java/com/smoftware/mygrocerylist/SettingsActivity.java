@@ -1,7 +1,10 @@
 package com.smoftware.mygrocerylist;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -40,6 +43,7 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
         setTitle("Settings");
 
         EditText email = (EditText)findViewById(R.id.editTextEmail);
+        Button cloudBtn = (Button) findViewById(R.id.cloudButton);
         Button restoreBtn = (Button)findViewById(R.id.restore_button);
 
         // email setting
@@ -59,6 +63,15 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
             }
         });
 
+        cloudBtn.setTextColor(Color.WHITE);
+        cloudBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), CloudActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        restoreBtn.setTextColor(Color.WHITE);
         restoreBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), RestoreDatabaseActivity.class);

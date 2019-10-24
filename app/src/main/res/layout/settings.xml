@@ -99,12 +99,39 @@
             android:focusable="false"
             android:buttonTint="#b4f0b4"/>
 
-        <Button
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="Restore Database"
-            android:id="@+id/restore_button"
-            android:enabled="true" />
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
+            <Button
+                android:id="@+id/cloudButton"
+                android:text="Import\nExport"
+                android:textSize="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:layout_gravity="fill"
+                android:drawableTop="@mipmap/ic_cloud_upload_color"
+                android:drawablePadding="10dp"
+                android:padding="20dp"
+                android:layout_weight="1.0"/>
+            <Button
+                android:id="@+id/restore_button"
+                android:text="Restore\nDatabase"
+                android:textSize="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:layout_gravity="fill"
+                android:drawableTop="@mipmap/ic_wrench_color"
+                android:drawablePadding="10dp"
+                android:padding="20dp"
+                android:layout_weight="1.0"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

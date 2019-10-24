@@ -137,6 +137,7 @@ public class ManageListsAdapter extends BaseAdapter {
     public void DeleteList(long listId)
     {
         db(_context).runQuery(String.format("DELETE FROM GroceryList WHERE _id = %d", listId));
+        db(_context).runQuery(String.format("DELETE FROM ListCategory WHERE ListId = %d", listId));
         db(_context).runQuery(String.format("DELETE FROM ListCategoryGroceryItem WHERE ListId = %d", listId));
         RefreshAndNotify();
     }

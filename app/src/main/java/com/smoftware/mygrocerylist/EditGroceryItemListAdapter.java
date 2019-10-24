@@ -132,7 +132,7 @@ public class EditGroceryItemListAdapter extends BaseAdapter {
             _groceryItemList = db(_context).getGroceryItemList(query);
 
             // get list of SELECTED grocery items for this list/category
-            query = String.format("SELECT DISTINCT g._id, g.Name, g.CatId, g.IsSelected FROM GroceryItem g " +
+            query = String.format("SELECT DISTINCT g._id, g.Name, g.CatId, g.IsSelected, g.Quantity FROM GroceryItem g " +
                                     "INNER JOIN ListCategoryGroceryItem l ON l.GroceryItemId = g._id " +
                                     "WHERE l.ListId = %d AND g.CatId = %d ORDER BY g.Name COLLATE NOCASE", _listId, _catId);
             List<Tables.GroceryItem> selectedGroceryItemList = db(_context).getGroceryItemList(query);

@@ -276,7 +276,7 @@ public class GoShoppingAdapter extends BaseAdapter {
             table.addCell(new PdfPCell(cellCategoryName));
 
             // add grocery items for this category
-            query = String.format("SELECT DISTINCT gi._id, gi.CatId, gi.Name, gi.IsSelected FROM GroceryItem gi " +
+            query = String.format("SELECT DISTINCT gi._id, gi.CatId, gi.Name, gi.IsSelected, gi.Quantity FROM GroceryItem gi " +
                                 "INNER JOIN ListCategoryGroceryItem l ON l.GroceryItemId = gi._id " +
                                 "WHERE l.CatId = %d AND l.ListId = %d ORDER BY gi.Name", category._id, _groceryList.get(position)._id);
             List<Tables.GroceryItem> itemList = DbConnection.db(_context).getGroceryItemList(query);
@@ -303,7 +303,13 @@ public class GoShoppingAdapter extends BaseAdapter {
                 }
 
                 // grocery item
-                cell = new PdfPCell(new Phrase(item.Name, groceryItemFont));
+                if (item.Quantity > 1) {
+                    cell = new PdfPCell(new Phrase(String.format("(%d) %s", item.Quantity, item.Name), groceryItemFont));
+                }
+                else {
+                    cell = new PdfPCell(new Phrase(item.Name, groceryItemFont));
+                }
+
                 cell.setBorderWidth(0);
                 cell.setPaddingLeft(0);
                 cell.setHorizontalAlignment(Element.ALIGN_LEFT);

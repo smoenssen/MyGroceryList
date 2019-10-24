@@ -1,8 +1,4 @@
 
 
 Add Undo capability
-Add Go Shopping feature that displays list of only items that are selected
-  and show checkbox next to each item
-Add support for input of number of grocery items to get (include adding to pdf)
-Add support for import/export database (try using Drive)
 What's wrong with voice recognition?

@@ -143,8 +143,14 @@ public class GoShoppingListAdapter extends BaseExpandableListAdapter {
             Log.i("tag", String.format("group = %d, child = %d, %s", groupPosition, childPosition, child.getName()));
         }
 
+        int quantity = child.getListCategoryGroceryItem().Quantity;
+        if (quantity > 1) {
+            viewHolder.textView.setText(String.format("(%d) %s", quantity, child.getName()));
+        }
+        else {
+            viewHolder.textView.setText(child.getName());
+        }
         viewHolder.checkBox.setChecked(child.getListCategoryGroceryItem().IsPurchased == 1);
-        viewHolder.textView.setText(child.getName());
 
         return convertView;
     }

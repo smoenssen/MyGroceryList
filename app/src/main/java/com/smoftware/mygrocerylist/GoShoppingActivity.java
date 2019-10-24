@@ -3,8 +3,10 @@ package com.smoftware.mygrocerylist;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import com.smoftware.mygrocerylist.shopping.GoShoppingListActivity;
 
 import java.io.File;
+import java.lang.reflect.Method;
 
 public class GoShoppingActivity extends AppCompatActivity {
 
@@ -54,6 +57,17 @@ public class GoShoppingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (fabEmail != null) {
                     if (isExternalStorageWritable()) {
+
+                        // This is needed to get around FileUriExposedException
+                        if (Build.VERSION.SDK_INT>=24){
+                            try{
+                                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                                m.invoke(null);
+                            }catch(Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+
                         File folder = DatabaseOpenHelper.getStorageDir(getBaseContext());
 
                         File pdfFile = new File(folder, "mygrocerylist.pdf");
