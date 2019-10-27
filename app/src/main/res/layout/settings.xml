@@ -13,7 +13,7 @@
         android:layout_marginRight="15dp"
         android:id="@+id/linearLayout1">
         <TextView
-            android:text="Email:"
+            android:text="Enter email to send PDF grocery list:"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

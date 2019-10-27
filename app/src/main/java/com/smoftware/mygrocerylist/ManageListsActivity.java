@@ -62,6 +62,13 @@ public class ManageListsActivity extends AppCompatActivity implements AddListFra
             }
         });
 
+        emptyListView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editCategoryList();
+            }
+        });
+
         manageListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -115,6 +122,12 @@ public class ManageListsActivity extends AppCompatActivity implements AddListFra
                 return true;
             }
         });
+    }
+
+    private void editCategoryList() {
+        Intent activity = new Intent(getBaseContext(), EditCategoryListActivity.class);
+        activity.putExtra("Title", "Edit Categories");
+        startActivity(activity);
     }
 
     public static void showFabWithAnimation(final FloatingActionButton fab, final int delay) {

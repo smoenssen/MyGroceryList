@@ -20,14 +20,6 @@
         android:visibility="gone"
         android:fontFamily="sans-serif-light"/>
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_mic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_marginBottom="20dp"
-        android:layout_marginStart="20dp"
-        android:src="@mipmap/ic_mic_white_24dp" />
-    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
