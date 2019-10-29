@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import static com.smoftware.mygrocerylist.DbConnection.db;
+
 /**
  * Created by steve on 12/21/16.
  */
@@ -394,5 +396,20 @@ public class GoShoppingAdapter extends BaseAdapter {
         table.writeSelectedRows(0, table.getRows().size(), 0, 0, w.getDirectContent());
         doc.close();
         return table.getTotalHeight();
+    }
+
+    public void RefreshAndNotify()
+    {
+        _groceryList.clear();
+        _groceryList = db(_context).getGroceryList("SELECT * FROM GroceryList");
+        notifyDataSetChanged();
+    }
+
+    public void DeleteList(long listId)
+    {
+        db(_context).runQuery(String.format("DELETE FROM GroceryList WHERE _id = %d", listId));
+        db(_context).runQuery(String.format("DELETE FROM ListCategory WHERE ListId = %d", listId));
+        db(_context).runQuery(String.format("DELETE FROM ListCategoryGroceryItem WHERE ListId = %d", listId));
+        RefreshAndNotify();
     }
 }

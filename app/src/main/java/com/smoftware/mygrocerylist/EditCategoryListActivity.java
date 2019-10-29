@@ -190,7 +190,7 @@ public class EditCategoryListActivity extends AppCompatActivity implements AddCa
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.options_menu_list_checkbox, menu);
+        getMenuInflater().inflate(R.menu.options_menu_edit_category, menu);
         menuIcon = menu.findItem(R.id.action_done);
         menuIcon.getIcon().setTint(getResources().getColor(R.color.White));
         return true;
@@ -203,12 +203,6 @@ public class EditCategoryListActivity extends AppCompatActivity implements AddCa
         {
             case android.R.id.home:
                 finish();
-                return true;
-            case R.id.action_select_all:
-                editCategoryListAdapter.SetAllSelect(1);
-                return true;
-            case R.id.action_unselect_all:
-                editCategoryListAdapter.SetAllSelect(0);
                 return true;
             case R.id.action_done:
                 Intent myIntent = new Intent(this, CreateListActivity.class);

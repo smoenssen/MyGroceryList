@@ -1,6 +1,8 @@
 package com.smoftware.mygrocerylist;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -9,13 +11,16 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.smoftware.mygrocerylist.shopping.GoShoppingListActivity;
 
@@ -126,6 +131,38 @@ public class GoShoppingActivity extends AppCompatActivity {
                     showFabWithAnimation(fabGo, 300);
                     fabShown = true;
                 }
+            }
+        });
+
+        goShoppingView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                // prompt to confirm deletion
+                final long listId = goShoppingView.getAdapter().getItemId(position);
+                final String name = (String)goShoppingView.getAdapter().getItem(position);
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(GoShoppingActivity.this);
+                alert.setTitle("Delete");
+                alert.setMessage("Would you like to delete " + name + "?");
+
+                alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        goShoppingAdapter.DeleteList(listId);
+                        Toast.makeText(getBaseContext(), name + " deleted", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        // do nothing
+                    }
+                });
+
+                Dialog dialog = alert.create();
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+                dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                dialog.show();
+                return true;
             }
         });
     }

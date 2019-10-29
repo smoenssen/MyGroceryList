@@ -93,8 +93,9 @@ public class EditCategoryListAdapter extends BaseAdapter {
 
         int imgIcon = _context.getResources().getIdentifier(_categoryList.get(position).Icon, "mipmap", _context.getPackageName());
         viewHolder.TextView.setText(_categoryList.get(position).Name);
-        viewHolder.CheckBox.setChecked(_categoryList.get(position).IsSelected == 1);
         viewHolder.TextView.setCompoundDrawablesWithIntrinsicBounds(imgIcon, 0, 0, 0);
+        //viewHolder.CheckBox.setChecked(_categoryList.get(position).IsSelected == 1);
+        viewHolder.CheckBox.setVisibility(View.INVISIBLE);
         return convertView;
     }
 
