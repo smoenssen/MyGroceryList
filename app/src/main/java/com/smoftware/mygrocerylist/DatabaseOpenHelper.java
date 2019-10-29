@@ -77,6 +77,7 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
         File f = new File(dbTestPath);
         f.setWritable(true, false);
         OutputStream out = null;
+        boolean ret = true;
 
         try {
             out = new FileOutputStream(f);
@@ -87,24 +88,42 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
         writeDatase(in, out);
 
         try {
-            //todo how to catch invalid database
-            //android.database.sqlite.SQLiteDatabaseCorruptException: file is not a database (code 26 SQLITE_NOTADB): , while compiling: PRAGMA journal_mode
             SQLiteDatabase db = SQLiteDatabase.openDatabase(dbTestPath, null, 0);
+            // check version
             int version = db.getVersion();
-            db.close();
-
-            if (version == DATABASE_VERSION) {
-                return true;
+            if (version != DATABASE_VERSION) {
+                ret = false;
             }
+
+            // do a simple query on each table and make sure there is no exception
+            String query = String.format("SELECT COUNT (*) FROM Category");
+            int count = DbConnection.db(applicationContext).getCount(query);
+
+            query = String.format("SELECT COUNT (*) FROM GroceryItem");
+            count = DbConnection.db(applicationContext).getCount(query);
+
+            query = String.format("SELECT COUNT (*) FROM GroceryList");
+            count = DbConnection.db(applicationContext).getCount(query);
+
+            query = String.format("SELECT COUNT (*) FROM ListCategory");
+            count = DbConnection.db(applicationContext).getCount(query);
+
+            query = String.format("SELECT COUNT (*) FROM ListCategoryGroceryItem");
+            count = DbConnection.db(applicationContext).getCount(query);
+
+            query = String.format("SELECT COUNT (*) FROM Settings");
+            count = DbConnection.db(applicationContext).getCount(query);
+
+            db.close();
         }
-        catch (SQLiteDatabaseCorruptException e) {
+        catch (Exception e) {
             e.printStackTrace();
-            return false;
+            ret = false;
         }
 
         deleteFile(dbTestPath);
 
-        return false;
+        return ret;
     }
 
     public static void replaceDatabase(Context applicationContext, InputStream in) {

@@ -58,6 +58,13 @@ public class GoShoppingActivity extends AppCompatActivity {
         this.fabGo = (FloatingActionButton)findViewById(R.id.fab_go);
         this.fabGo.hide();
 
+        emptyListView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editCategoryList();
+            }
+        });
+
         fabEmail.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (fabEmail != null) {
@@ -165,6 +172,12 @@ public class GoShoppingActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void editCategoryList() {
+        Intent activity = new Intent(getBaseContext(), EditCategoryListActivity.class);
+        activity.putExtra("Title", "Edit Categories");
+        startActivity(activity);
     }
 
     public static void showFabWithAnimation(final FloatingActionButton fab, final int delay) {

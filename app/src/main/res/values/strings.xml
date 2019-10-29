@@ -2,8 +2,8 @@
     <string name="app_name">Groceries
     </string>
 
-    <string name="no_grocery_items">No grocery items.</string>
-    <string name="no_grocery_lists">No grocery lists.</string>
+    <string name="no_grocery_items">No grocery items.\nClick to start.</string>
+    <string name="no_grocery_lists">No grocery lists have been saved.\nClick to create a list.</string>
     <string name="no_grocery_categories">No grocery categories.</string>
 
     <string name="fontsize_prompt">Choose a font size for printed list:</string>

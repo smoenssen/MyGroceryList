@@ -77,24 +77,31 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
         this.fab.show();
         showFabWithAnimation(fab, 300);
 
-        this.fab_mic = (FloatingActionButton) findViewById(R.id.fab_mic);
-        this.fab_mic.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
-        this.fab_mic.setRippleColor(getResources().getColor(R.color.colorFabRipple));
-        this.fab_mic.show();
-        showFabWithAnimation(fab_mic, 300);
+        //todo: removing because it doesn't work
+        //this.fab_mic = (FloatingActionButton) findViewById(R.id.fab_mic);
+        //this.fab_mic.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
+        //this.fab_mic.setRippleColor(getResources().getColor(R.color.colorFabRipple));
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        //this.fab_mic.show();
+        //showFabWithAnimation(fab_mic, 300);
+
+        emptyListView.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
-                if (fab != null) {
-                    fab.hide();
-                    Intent activity = new Intent(getBaseContext(), EditCategoryListActivity.class);
-                    activity.putExtra("Title", "Edit Categories");
-                    activity.putExtra("ListId", listId);
-                    startActivityForResult(activity, EDIT_CATEGORY_LIST_INTENT);
-                }
+                editCategoryList();
             }
         });
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            if (fab != null) {
+                fab.hide();
+                editCategoryList();
+            }
+            }
+        });
+
+        /* todo: doesn't work
         fab_mic.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (fab != null) {
@@ -104,6 +111,7 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
                 }
             }
         });
+        */
 
         createListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -157,6 +165,13 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    private void editCategoryList() {
+        Intent activity = new Intent(getBaseContext(), EditCategoryListActivity.class);
+        activity.putExtra("Title", "Edit Categories");
+        activity.putExtra("ListId", listId);
+        startActivityForResult(activity, EDIT_CATEGORY_LIST_INTENT);
     }
 
     public static void showFabWithAnimation(final FloatingActionButton fab, final int delay) {

@@ -67,6 +67,7 @@ public class EditCategoryListAdapter extends BaseAdapter {
             viewHolder = new ViewCheckboxHolder();
             viewHolder.TextView = convertView.findViewById(R.id.textCheckbox);
             viewHolder.CheckBox = convertView.findViewById(R.id.chk);
+            viewHolder.CheckBox.setVisibility(View.INVISIBLE);
 
             // store the holder with the view.
             convertView.setTag(viewHolder);
