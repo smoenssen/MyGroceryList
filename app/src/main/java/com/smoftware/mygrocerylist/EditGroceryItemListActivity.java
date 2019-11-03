@@ -32,7 +32,7 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
         super.onCreate(savedInstanceState);
         setContentView(R.layout.icon_list_add);
 
-        setTitle("Edit Grocery Items");
+        setTitle("Edit Items");
         final long catId = getIntent().getLongExtra("CatId", 0);
         final long listId = getIntent().getLongExtra("ListId", 0);
 
@@ -131,7 +131,7 @@ public class EditGroceryItemListActivity extends AppCompatActivity implements Ad
     }
 
     public static void showFabWithAnimation(final FloatingActionButton fab, final int delay) {
-        fab.setVisibility(View.INVISIBLE);
+        fab.hide();
         fab.setScaleX(0.0F);
         fab.setScaleY(0.0F);
         fab.setAlpha(0.0F);

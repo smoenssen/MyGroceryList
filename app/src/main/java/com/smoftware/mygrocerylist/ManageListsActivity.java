@@ -20,13 +20,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 public class ManageListsActivity extends AppCompatActivity implements AddListFragment.IOnAddListDialogListener {
 
-    private FloatingActionButton fab;
     private ManageListsAdapter listsManageAdapter = null;
-    MenuItem menuIcon = null;
-    boolean deleteForever = false;
+    private MenuItem menuIcon = null;
+    private boolean deleteForever = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,38 +34,17 @@ public class ManageListsActivity extends AppCompatActivity implements AddListFra
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        setContentView(R.layout.icon_list_add);
+        setContentView(R.layout.icon_list);
+
+        setTitle("Manage Lists");
 
         listsManageAdapter = new ManageListsAdapter(this);
-        final ListView manageListsView = (ListView)findViewById(R.id.iconListViewAdd);
+        final ListView manageListsView = (ListView)findViewById(R.id.iconListView);
         manageListsView.setAdapter(listsManageAdapter);
 
-        TextView emptyListView = (TextView) findViewById(R.id.emptyListViewAdd);
+        TextView emptyListView = (TextView) findViewById(R.id.emptyListView);
         emptyListView.setText(R.string.no_grocery_lists);
         manageListsView.setEmptyView(emptyListView);
-
-        this.fab = (FloatingActionButton)findViewById(R.id.fab_add);
-        this.fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
-        this.fab.setRippleColor(getResources().getColor(R.color.colorFabRipple));
-
-        this.fab.show();
-        showFabWithAnimation(fab, 300);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (fab != null)
-                {
-                    DisplayAddListDialog("");
-                }
-            }
-        });
-
-        emptyListView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editCategoryList();
-            }
-        });
 
         manageListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -75,7 +52,6 @@ public class ManageListsActivity extends AppCompatActivity implements AddListFra
                 long listId = manageListsView.getAdapter().getItemId(position);
                 String listName = (String)manageListsView.getAdapter().getItem(position);
 
-                fab.hide();
                 Intent myIntent = new Intent(getBaseContext(), CreateListActivity.class);
                 myIntent.putExtra("ListId", listId);
                 myIntent.putExtra("ListName", (String)listName);
@@ -124,38 +100,14 @@ public class ManageListsActivity extends AppCompatActivity implements AddListFra
         });
     }
 
-    private void editCategoryList() {
-        Intent activity = new Intent(getBaseContext(), EditCategoryListActivity.class);
-        activity.putExtra("Title", "Edit Categories");
-        startActivity(activity);
-    }
-
-    public static void showFabWithAnimation(final FloatingActionButton fab, final int delay) {
-        fab.setVisibility(View.INVISIBLE);
-        fab.setScaleX(0.0F);
-        fab.setScaleY(0.0F);
-        fab.setAlpha(0.0F);
-        fab.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                fab.getViewTreeObserver().removeOnPreDrawListener(this);
-                fab.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        fab.show();
-                    }
-                }, delay);
-                return true;
-            }
-        });
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.options_menu_list_delete, menu);
-        menuIcon = menu.findItem(R.id.action_settings_delete);
-        menuIcon.getIcon().setTint(getResources().getColor(R.color.White));
+        if (listsManageAdapter.getCount() > 0) {
+            getMenuInflater().inflate(R.menu.options_menu_list_delete, menu);
+            menuIcon = menu.findItem(R.id.action_settings_delete);
+            menuIcon.getIcon().setTint(getResources().getColor(R.color.White));
+        }
         return true;
     }
 
@@ -167,9 +119,7 @@ public class ManageListsActivity extends AppCompatActivity implements AddListFra
             case android.R.id.home:
                 finish();
                 return true;
-
             case R.id.action_settings_delete:
-
                 if (deleteForever == false)
                 {
                     // show checkboxes
@@ -180,7 +130,6 @@ public class ManageListsActivity extends AppCompatActivity implements AddListFra
                 {
                     confirmDelete();
                 }
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

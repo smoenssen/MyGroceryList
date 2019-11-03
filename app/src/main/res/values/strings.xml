@@ -2,8 +2,9 @@
     <string name="app_name">Groceries
     </string>
 
-    <string name="no_grocery_items">No grocery items.\nClick to start.</string>
-    <string name="no_grocery_lists">No grocery lists have been saved.\nClick to create a list.</string>
+    <string name="no_grocery_items">No items.\nClick to start.</string>
+    <string name="no_grocery_lists">No lists.</string>
+    <string name="no_grocery_lists_create">No lists.\n\nClick here to create a list or click save icon above to save current list.</string>
     <string name="no_grocery_categories">No grocery categories.</string>
 
     <string name="fontsize_prompt">Choose a font size for printed list:</string>
@@ -31,7 +32,6 @@
     </string-array>
 
     <string name="include_checkboxes_prompt">Include checkboxes on printed list</string>
-    <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

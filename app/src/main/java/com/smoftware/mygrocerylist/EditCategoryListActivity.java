@@ -150,7 +150,7 @@ public class EditCategoryListActivity extends AppCompatActivity implements AddCa
     }
 
     public static void showFabWithAnimation(final FloatingActionButton fab, final int delay) {
-        fab.setVisibility(View.INVISIBLE);
+        fab.hide();
         fab.setScaleX(0.0F);
         fab.setScaleY(0.0F);
         fab.setAlpha(0.0F);

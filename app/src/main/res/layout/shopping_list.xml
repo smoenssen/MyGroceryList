@@ -28,7 +28,7 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="20dp"
         android:layout_marginStart="20dp"
-        android:src="@mipmap/ic_star" />
+        android:src="@mipmap/ic_go" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_email"
         android:visibility="invisible"

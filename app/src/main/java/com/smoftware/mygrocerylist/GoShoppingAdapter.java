@@ -412,4 +412,44 @@ public class GoShoppingAdapter extends BaseAdapter {
         db(_context).runQuery(String.format("DELETE FROM ListCategoryGroceryItem WHERE ListId = %d", listId));
         RefreshAndNotify();
     }
+
+    public int AddGroceryList(String name, String icon)
+    {
+        List<Tables.GroceryList> groceryList = DbConnection.db(_context).getGroceryList(String.format("SELECT * FROM GroceryList WHERE Name = \"%s\"", name));
+        if (groceryList.size() == 0)
+        {
+            // insert new grocery list
+            Tables.GroceryList groceryListItem = new Tables.GroceryList(name, icon);
+            return DbConnection.db(_context).insertGroceryList(groceryListItem);
+        }
+
+        return 0;
+    }
+
+    public void PopulateListCategoryGroceryItem(int listId)
+    {
+        String query = "Select * FROM Category WHERE IsSelected = 1";
+        List<Tables.Category> categoryList = DbConnection.db(_context).getCategoryList(query);
+
+        for (Tables.Category category : categoryList)
+        {
+            // ListCategory table entry
+            Tables.ListCategory listCatItem = new Tables.ListCategory(listId, category._id);
+            DbConnection.db(_context).insertListCategory(listCatItem);
+
+            query = String.format("SELECT * FROM GroceryItem WHERE CatId = %d AND IsSelected = 1", category._id);
+            List<Tables.GroceryItem> groceryItemList = DbConnection.db(_context).getGroceryItemList(query);
+
+            // ListCategoryGroceryItem table entries
+            for (Tables.GroceryItem groceryItem : groceryItemList)
+            {
+                if (groceryItem.IsSelected == 1)
+                {
+                    //todo should isPurchased default to 0 here?
+                    Tables.ListCategoryGroceryItem listCatGroceryItem = new Tables.ListCategoryGroceryItem(listId, category._id, groceryItem._id, 0, groceryItem.Quantity);
+                    DbConnection.db(_context).insertListCategoryGroceryItem(listCatGroceryItem);
+                }
+            }
+        }
+    }
 }

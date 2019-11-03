@@ -42,9 +42,6 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".RecordingActivity" />
         <activity android:name=".CloudActivity" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
         <activity android:name=".RestoreDatabaseActivity" />
         <activity android:name=".shopping.GoShoppingListActivity" />
     </application>

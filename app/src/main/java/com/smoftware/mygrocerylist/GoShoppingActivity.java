@@ -1,10 +1,13 @@
 package com.smoftware.mygrocerylist;
 
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +16,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -27,13 +31,14 @@ import com.smoftware.mygrocerylist.shopping.GoShoppingListActivity;
 import java.io.File;
 import java.lang.reflect.Method;
 
-public class GoShoppingActivity extends AppCompatActivity {
+public class GoShoppingActivity extends AppCompatActivity implements NameListFragment.IOnNameListDialogListener {
 
-    FloatingActionButton fabEmail;
-    FloatingActionButton fabGo;
-    GoShoppingAdapter goShoppingAdapter = null;
-    boolean fabShown = false;
-    int position = 0;
+    private FloatingActionButton fabEmail;
+    private FloatingActionButton fabGo;
+    private GoShoppingAdapter goShoppingAdapter = null;
+    private boolean fabShown = false;
+    private int position = 0;
+    private MenuItem menuIcon = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +50,14 @@ public class GoShoppingActivity extends AppCompatActivity {
 
         setContentView(R.layout.shopping_list);
 
+        setTitle("Go Shopping");
+
         goShoppingAdapter = new GoShoppingAdapter(this);
         final ListView goShoppingView = (ListView)findViewById(R.id.shoppingList);
         goShoppingView.setAdapter(goShoppingAdapter);
 
         TextView emptyListView = (TextView) findViewById(R.id.emptyListViewShopping);
-        emptyListView.setText(R.string.no_grocery_lists);
+        emptyListView.setText(R.string.no_grocery_lists_create);
         goShoppingView.setEmptyView(emptyListView);
 
         this.fabEmail = (FloatingActionButton)findViewById(R.id.fab_email);
@@ -176,12 +183,12 @@ public class GoShoppingActivity extends AppCompatActivity {
 
     private void editCategoryList() {
         Intent activity = new Intent(getBaseContext(), EditCategoryListActivity.class);
-        activity.putExtra("Title", "Edit Categories");
+        activity.putExtra("Title", "Categories");
         startActivity(activity);
     }
 
     public static void showFabWithAnimation(final FloatingActionButton fab, final int delay) {
-        fab.setVisibility(View.INVISIBLE);
+        fab.hide();
         fab.setScaleX(0.0F);
         fab.setScaleY(0.0F);
         fab.setAlpha(0.0F);
@@ -201,6 +208,15 @@ public class GoShoppingActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.options_menu_go_shopping, menu);
+        menuIcon = menu.findItem(R.id.action_save);
+        menuIcon.getIcon().setTint(getResources().getColor(R.color.White));
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
@@ -208,9 +224,69 @@ public class GoShoppingActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.action_save:
+                DisplayNameListDialog("");
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void DisplayNameListDialog(String listName) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        // Remove fragment else it will crash as it is already added to backstack
+        Fragment prev = getFragmentManager().findFragmentByTag("NameListFragment");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        Bundle args = new Bundle();
+        args.putString("name", listName);
+        NameListFragment newFragment = NameListFragment.newInstance(args);
+        newFragment.show(ft, "NameListFragment");
+    }
+
+    public void OnNameListDialogListener(String name) {
+        if (name.equals("")) {
+            DisplayNameListAlert("Name", "List name cannot be empty.", name);
+        } else {
+            final int listId = goShoppingAdapter.AddGroceryList(name, "ic_view_list_white_24dp");
+
+            if (listId == 0) {
+                String text = String.format("\'%s\' list already exists.", name);
+                DisplayNameListAlert("Name Exists", text, name);
+            } else {
+                // add all data for the new list in a background thread
+                finish();
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        goShoppingAdapter.PopulateListCategoryGroceryItem((int) listId);
+                    }
+                });
+            }
+        }
+    }
+
+    void DisplayNameListAlert(final String title, final String text, final String name) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(title);
+        alert.setMessage(text);
+
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                DisplayNameListDialog(name);
+            }
+        });
+
+        Dialog dialog = alert.create();
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.show();
     }
 
     /* Checks if external storage is available for read and write */

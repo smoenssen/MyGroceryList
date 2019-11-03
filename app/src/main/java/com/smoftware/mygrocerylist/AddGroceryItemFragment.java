@@ -49,7 +49,7 @@ public class AddGroceryItemFragment extends DialogFragment {
         Button buttonSave = (Button)view.findViewById(R.id.saveButton);
 
         TextView title = (TextView)view.findViewById(R.id.textTitle);
-        title.setText("Grocery Item");
+        title.setText("Add Item");
 
         TextView descr = (TextView)view.findViewById(R.id.textInstructions);
         descr.setText("Enter the name and quantity");

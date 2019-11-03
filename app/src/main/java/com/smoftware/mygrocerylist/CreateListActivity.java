@@ -59,6 +59,8 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
 
         setContentView(R.layout.icon_list_edit);
 
+        setTitle("Create List");
+
         listId = getIntent().getLongExtra("ListId", 0);
         listName = getIntent().getStringExtra("ListName");
         isEditMode = getIntent().getBooleanExtra("EditMode", false);
@@ -169,13 +171,13 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
 
     private void editCategoryList() {
         Intent activity = new Intent(getBaseContext(), EditCategoryListActivity.class);
-        activity.putExtra("Title", "Edit Categories");
+        activity.putExtra("Title", "Categories");
         activity.putExtra("ListId", listId);
         startActivityForResult(activity, EDIT_CATEGORY_LIST_INTENT);
     }
 
     public static void showFabWithAnimation(final FloatingActionButton fab, final int delay) {
-        fab.setVisibility(View.INVISIBLE);
+        fab.hide();
         fab.setScaleX(0.0F);
         fab.setScaleY(0.0F);
         fab.setAlpha(0.0F);

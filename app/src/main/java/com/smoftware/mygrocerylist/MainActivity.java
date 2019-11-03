@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
         DbConnection.db(this).open();
 
+        setTitle("Go Shopping List");
+
         //srm colors xml:
         // http://stackoverflow.com/questions/3769762/android-color-xml-resource-file
 

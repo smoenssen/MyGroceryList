@@ -5,6 +5,13 @@
     android:layout_height="match_parent">
     android:minWidth="25dp"
     android:minHeight="25dp">
+    <TextView
+        android:id="@+id/emptyListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif-light"/>
     <ListView
         android:minWidth="25dp"
         android:minHeight="25dp"
