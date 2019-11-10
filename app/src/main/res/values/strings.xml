@@ -7,6 +7,9 @@
     <string name="no_grocery_lists_create">No lists.\n\nClick here to create a list or click save icon above to save current list.</string>
     <string name="no_grocery_categories">No grocery categories.</string>
 
+    <string name="continue_list">Continue list</string>
+    <string name="create_new_list">Create new list</string>
+
     <string name="fontsize_prompt">Choose a font size for printed list:</string>
     <string-array name="fontsize_array">
         <item>8</item>

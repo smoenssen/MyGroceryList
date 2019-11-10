@@ -426,6 +426,12 @@ public class GoShoppingAdapter extends BaseAdapter {
         return 0;
     }
 
+    public boolean IsGroceryListToSave() {
+        String query = "Select * FROM Category WHERE IsSelected = 1";
+        List<Tables.Category> categoryList = DbConnection.db(_context).getCategoryList(query);
+        return categoryList.size() > 0;
+    }
+
     public void PopulateListCategoryGroceryItem(int listId)
     {
         String query = "Select * FROM Category WHERE IsSelected = 1";

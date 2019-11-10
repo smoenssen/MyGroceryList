@@ -28,6 +28,7 @@ public class EditCategoryListActivity extends AppCompatActivity implements AddCa
     long selectedCatId = 0;
     long listId = 0;
     String Title;
+    String comingFrom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,8 @@ public class EditCategoryListActivity extends AppCompatActivity implements AddCa
         Title = getIntent().getStringExtra("Title");
         setTitle(Title);
         listId = getIntent().getLongExtra("ListId", 0);
+
+        comingFrom = getIntent().getStringExtra("ComingFrom");
 
         editCategoryListAdapter = new EditCategoryListAdapter(this, listId);
         final ListView editCategoryListView = (ListView)findViewById(R.id.iconListViewAdd);
@@ -206,7 +209,14 @@ public class EditCategoryListActivity extends AppCompatActivity implements AddCa
                 return true;
             case R.id.action_done:
                 Intent myIntent = new Intent(this, CreateListActivity.class);
-                setResult(RESULT_OK, myIntent);
+
+                if (comingFrom != null && comingFrom.equals("GoShoppingActivity")) {
+                    startActivity(myIntent);
+                }
+                else {
+                    setResult(RESULT_OK, myIntent);
+                }
+
                 finish();
                 return true;
             default:

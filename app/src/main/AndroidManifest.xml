@@ -44,6 +44,7 @@
         <activity android:name=".CloudActivity" />
         <activity android:name=".RestoreDatabaseActivity" />
         <activity android:name=".shopping.GoShoppingListActivity" />
+        <activity android:name=".ContinueOrCreateNewListActivity" />
     </application>
 
 </manifest>

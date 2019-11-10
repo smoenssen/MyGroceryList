@@ -184,6 +184,7 @@ public class GoShoppingActivity extends AppCompatActivity implements NameListFra
     private void editCategoryList() {
         Intent activity = new Intent(getBaseContext(), EditCategoryListActivity.class);
         activity.putExtra("Title", "Categories");
+        activity.putExtra("ComingFrom", "GoShoppingActivity");
         startActivity(activity);
     }
 
@@ -208,6 +209,12 @@ public class GoShoppingActivity extends AppCompatActivity implements NameListFra
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        goShoppingAdapter.RefreshAndNotify();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.options_menu_go_shopping, menu);
@@ -225,7 +232,13 @@ public class GoShoppingActivity extends AppCompatActivity implements NameListFra
                 finish();
                 return true;
             case R.id.action_save:
-                DisplayNameListDialog("");
+                // check to see if there is anything to save
+                if (goShoppingAdapter.IsGroceryListToSave()) {
+                    DisplayNameListDialog("");
+                }
+                else {
+                    Toast.makeText(getBaseContext(), "Nothing to save", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

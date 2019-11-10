@@ -32,11 +32,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 public class CreateListActivity extends AppCompatActivity implements NameListFragment.IOnNameListDialogListener {
     final private int EDIT_CATEGORY_LIST_INTENT = 0;
-    final private int EDIT_GROCERY_ITEM_LIST_INENT = 1;
+    final private int EDIT_GROCERY_ITEM_LIST_INTENT = 1;
     final private int INSTRUCTION_INTENT = 2;
-    private final int SPEECH_RECOGNITION_INTENT = 3;
     FloatingActionButton fab;
-    FloatingActionButton fab_mic;
     CreateListAdapter listCreateAdapter = null;
     long listId = 0;
     String listName = "";
@@ -73,19 +71,14 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
         emptyListView.setText(R.string.no_grocery_items);
         createListView.setEmptyView(emptyListView);
 
+        Intent intent = new Intent(getApplicationContext(), ContinueOrCreateNewListActivity.class);
+        startActivity(intent);
+
         this.fab = (FloatingActionButton) findViewById(R.id.fab_edit);
         this.fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
         this.fab.setRippleColor(getResources().getColor(R.color.colorFabRipple));
         this.fab.show();
         showFabWithAnimation(fab, 300);
-
-        //todo: removing because it doesn't work
-        //this.fab_mic = (FloatingActionButton) findViewById(R.id.fab_mic);
-        //this.fab_mic.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));
-        //this.fab_mic.setRippleColor(getResources().getColor(R.color.colorFabRipple));
-
-        //this.fab_mic.show();
-        //showFabWithAnimation(fab_mic, 300);
 
         emptyListView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,18 +96,6 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
             }
         });
 
-        /* todo: doesn't work
-        fab_mic.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (fab != null) {
-                    Intent activity = new Intent(getBaseContext(), RecordingActivity.class);
-                    activity.putExtra("ListId", listId);
-                    startActivityForResult(activity, SPEECH_RECOGNITION_INTENT);
-                }
-            }
-        });
-        */
-
         createListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -128,7 +109,7 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
                 Intent intent = new Intent(getBaseContext(), EditGroceryItemListActivity.class);
                 intent.putExtra("CatId", catId);
                 intent.putExtra("ListId", listId);
-                startActivityForResult(intent, EDIT_GROCERY_ITEM_LIST_INENT);
+                startActivityForResult(intent, EDIT_GROCERY_ITEM_LIST_INTENT);
             }
         });
 
@@ -234,21 +215,27 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
                 finish();
                 return true;
             case R.id.action_save:
-                if (listId != 0) {
-                    // list already exists, so replace it. This happens if this activity is launched from Manage Lists.
-                    // Run task in background
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            listCreateAdapter.PopulateListCategoryGroceryItem((int) listId);
-                        }
-                    });
+                // check to see if there is anything to save
+                if (listCreateAdapter.getCount() > 0) {
+                    if (listId != 0) {
+                        // list already exists, so replace it. This happens if this activity is launched from Manage Lists.
+                        // Run task in background
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                listCreateAdapter.PopulateListCategoryGroceryItem((int) listId);
+                            }
+                        });
 
-                    Toast.makeText(this, listName + " saved", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    // prompt for list name
-                    DisplayNameListDialog("");
+                        Toast.makeText(this, listName + " saved", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        // prompt for list name
+                        DisplayNameListDialog("");
+                    }
+                }
+                else {
+                    Toast.makeText(getBaseContext(), "Nothing to save", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             default:
@@ -328,22 +315,8 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case SPEECH_RECOGNITION_INTENT:
-                    if (resultCode == RESULT_OK && null != data) {
-                        String result = data.getStringExtra("Results");
-                        SpeechParser.parseSpeechStringGroceryItems(this, (int) listId, result);
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (listCreateAdapter != null)
-                                    listCreateAdapter.RefreshAndNotify();
-                            }
-                        });
-                    }
-                    break;
                 case EDIT_CATEGORY_LIST_INTENT:
-                case EDIT_GROCERY_ITEM_LIST_INENT:
+                case EDIT_GROCERY_ITEM_LIST_INTENT:
                     // refresh list
                     listCreateAdapter.UpdateCategoryList();
                     this.fab.show();
