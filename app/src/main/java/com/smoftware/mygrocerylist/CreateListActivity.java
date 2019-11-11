@@ -39,6 +39,7 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
     long listId = 0;
     String listName = "";
     boolean isEditMode = false;
+    boolean clearList = false;
     MenuItem menuIcon = null;
     
     /**
@@ -62,6 +63,7 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
         listId = getIntent().getLongExtra("ListId", 0);
         listName = getIntent().getStringExtra("ListName");
         isEditMode = getIntent().getBooleanExtra("EditMode", false);
+        clearList = getIntent().getBooleanExtra("ClearList", false);
 
         listCreateAdapter = new CreateListAdapter(this, (int) listId);
         final ListView createListView = (ListView) findViewById(R.id.iconListViewEdit);
@@ -71,8 +73,9 @@ public class CreateListActivity extends AppCompatActivity implements NameListFra
         emptyListView.setText(R.string.no_grocery_items);
         createListView.setEmptyView(emptyListView);
 
-        Intent intent = new Intent(getApplicationContext(), ContinueOrCreateNewListActivity.class);
-        startActivity(intent);
+        if (clearList) {
+            listCreateAdapter.ClearList();
+        }
 
         this.fab = (FloatingActionButton) findViewById(R.id.fab_edit);
         this.fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorFab)));

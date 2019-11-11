@@ -58,8 +58,17 @@ public class MainActivity extends AppCompatActivity {
         createListBtn.setTextColor(Color.WHITE);
         createListBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), CreateListActivity.class);
-                startActivity(intent);
+                String query = String.format("SELECT COUNT (*) FROM Category WHERE IsSelected = 1");
+                int count = DbConnection.db(v.getContext()).getCount(query);
+
+                if (count > 0) {
+                    Intent intent = new Intent(getApplicationContext(), ContinueOrCreateNewListActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = new Intent(getApplicationContext(), CreateListActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 

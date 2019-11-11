@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,6 +30,8 @@ public class ContinueOrCreateNewListActivity extends AppCompatActivity {
 
         setContentView(R.layout.continue_or_create_new_list);
 
+        setTitle("Create List");
+
         TextView continueListView = (TextView) findViewById(R.id.continueList);
         TextView createNewListView = (TextView) findViewById(R.id.createNewList);
 
@@ -37,19 +41,38 @@ public class ContinueOrCreateNewListActivity extends AppCompatActivity {
         continueListView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //editCategoryList();
-                int x;
-                x=0;
+                Intent intent = new Intent(v.getContext(), CreateListActivity.class);
+                startActivity(intent);
             }
         });
 
         createNewListView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //editCategoryList();
-                int x;
-                x=0;
+                Intent intent = new Intent(v.getContext(), CreateListActivity.class);
+                intent.putExtra("ClearList", true);
+                startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
